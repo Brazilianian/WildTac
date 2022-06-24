@@ -1,5 +1,6 @@
 package com.wildtac.dto.product;
 
+import com.wildtac.dto.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class ProductDto {
     private double discount;
     private String phoneNumber;
     private List<FeedbackDto> feedbacks;
-    private List<String> images;
+    private List<ImageDto> images;
     private String linkYoutube;
     private String description;
     private double currentCount;

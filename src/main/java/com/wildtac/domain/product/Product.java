@@ -33,7 +33,11 @@ public class Product extends BaseEntity {
     private List<Image> images = new ArrayList<>();
 
     private String linkYoutube;
+
+    @Lob
     private String description;
+
+
     private double currentCount;
     private double saleCount;
 
