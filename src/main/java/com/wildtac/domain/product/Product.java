@@ -1,6 +1,7 @@
 package com.wildtac.domain.product;
 
 import com.wildtac.domain.BaseEntity;
+import com.wildtac.domain.Image;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,8 +28,9 @@ public class Product extends BaseEntity {
     @ToString.Exclude
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> images = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Image> images = new ArrayList<>();
 
     private String linkYoutube;
     private String description;
@@ -37,22 +39,5 @@ public class Product extends BaseEntity {
 
     public Product() {
         super();
-    }
-
-    public Product(String name, double cost, List<Characteristic> characteristics, double discount,
-                   List<Feedback> feedbacks, List<String> images, String linkYoutube,
-                   String description, double currentCount, double saleCount) {
-        super();
-
-        this.name = name;
-        this.cost = cost;
-        this.characteristics = characteristics;
-        this.discount = discount;
-        this.feedbacks = feedbacks;
-        this.images = images;
-        this.linkYoutube = linkYoutube;
-        this.description = description;
-        this.currentCount = currentCount;
-        this.saleCount = saleCount;
     }
 }
