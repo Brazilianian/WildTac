@@ -24,13 +24,11 @@ public class ProductMapper implements StructMapper<ProductDto, Product>{
 
     @Override
     public List<Product> fromDtoListToObjectList(List<ProductDto> productsDto) {
-        // FIXME: 24.06.2022 refactor
         return modelMapper.map(productsDto, new TypeToken<List<Product>>() {}.getType());
     }
 
     @Override
     public List<ProductDto> fromObjectListToDtoList(List<Product> products) {
-        // FIXME: 24.06.2022 refactor
         return modelMapper.map(products, new TypeToken<List<ProductDto>>() {}.getType());
     }
 

@@ -1,14 +1,14 @@
 package com.wildtac.service;
 
 import com.wildtac.domain.product.Product;
-import com.wildtac.dto.product.ProductDto;
 import com.wildtac.repository.ProductRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -20,8 +20,8 @@ public class ProductService {
         this.productRepo = productRepo;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepo.findAll(pageable);
     }
 
 
