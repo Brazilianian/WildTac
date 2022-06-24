@@ -32,12 +32,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable Long id) {
+    public ResponseEntity<?> getProduct(@PathVariable(name = "id") Long id) {
         Product product;
         try {
             product = productService.getProduct(id);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
         ProductDto productDto = productMapper.fromObjectToDto(product);
@@ -47,9 +47,26 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Product createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto) {
         Product product = productMapper.fromDtoToObject(productDto);
 
-        return productService.createProduct(product);
+        return ResponseEntity.ok(productService.createProduct(product));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable(name = "id") Long id) {
+        productService.deleteProduct(id);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> redactProduct(@RequestBody ProductDto product) {
+        Product redactedProduct;
+        try {
+            redactedProduct = productService.redactProduct(productMapper.fromDtoToObject(product));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(productMapper.fromObjectToDto(redactedProduct));
     }
 }

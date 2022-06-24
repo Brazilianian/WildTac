@@ -41,4 +41,33 @@ public class ProductService {
                .findById(id)
                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %s was not found", id)));
     }
+
+    /**
+     * @throws EntityNotFoundException if entity was not found
+     * @param id - field of product
+     */
+    public void deleteProduct(Long id) {
+        if (!productRepo.existsById(id)) {
+            log.warn(String.format("Deleting failed - product with id %s was not found", id));
+            throw new EntityNotFoundException(String.format("Product with id %s was not found", id));
+        }
+        productRepo.deleteById(id);
+        log.info(String.format("Product with id %s was deleted", id));
+    }
+
+    /**
+     * @throws EntityNotFoundException if entity was not found
+     * @param product - product with redacted data
+     * @return Product - redacted product
+     */
+    public Product redactProduct(Product product) {
+        if (!productRepo.existsById(product.getId())) {
+            log.warn(String.format("Redacting failed - product %s was not found", product.getName()));
+            throw new EntityNotFoundException(String.format("Product %s was not found", product.getName()));
+        }
+
+        Product redactedProduct = productRepo.save(product);
+        log.info(String.format("Product %s was redacted", redactedProduct.getName()));
+        return redactedProduct;
+    }
 }
