@@ -18,17 +18,16 @@ public class Product extends BaseEntity {
     private double cost;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Characteristic> characteristics = new ArrayList<>();
 
     private double discount;
-    private String phoneNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @Lob
-    @CollectionTable(name = "images", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "image")
+    @ElementCollection
     private List<String> images = new ArrayList<>();
 
     private String linkYoutube;
@@ -41,7 +40,7 @@ public class Product extends BaseEntity {
     }
 
     public Product(String name, double cost, List<Characteristic> characteristics, double discount,
-                   String phoneNumber, List<Feedback> feedbacks, List<String> images, String linkYoutube,
+                   List<Feedback> feedbacks, List<String> images, String linkYoutube,
                    String description, double currentCount, double saleCount) {
         super();
 
@@ -49,7 +48,6 @@ public class Product extends BaseEntity {
         this.cost = cost;
         this.characteristics = characteristics;
         this.discount = discount;
-        this.phoneNumber = phoneNumber;
         this.feedbacks = feedbacks;
         this.images = images;
         this.linkYoutube = linkYoutube;

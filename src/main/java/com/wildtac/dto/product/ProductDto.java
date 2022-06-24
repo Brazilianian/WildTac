@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class ProductDto {
+    private Long id;
     private String name;
     private double cost;
     private List<CharacteristicDto> characteristics;
@@ -23,21 +24,4 @@ public class ProductDto {
     private String description;
     private double currentCount;
     private double saleCount;
-
-    @Override
-    public String toString() {
-        return "ProductDto{" +
-                "name='" + name + '\'' +
-                ", cost='" + cost + '\'' +
-                ", characteristics=" + characteristics +
-                ", discount=" + discount +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", feedbacks=" + feedbacks +
-                ", images=" + images +
-                ", linkYoutube='" + linkYoutube + '\'' +
-                ", description='" + description + '\'' +
-                ", currentCount=" + currentCount +
-                ", saleCount=" + saleCount +
-                '}';
-    }
 }
