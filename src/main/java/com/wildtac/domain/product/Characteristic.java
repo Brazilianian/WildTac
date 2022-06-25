@@ -13,7 +13,6 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
-
 public class Characteristic extends BaseEntity {
     private String name;
     @ElementCollection

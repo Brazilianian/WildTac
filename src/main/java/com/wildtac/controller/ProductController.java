@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -47,6 +46,19 @@ public class ProductController {
 
         ProductDto productDto = productMapper.fromObjectToDto(product);
         return ResponseEntity.ok(productDto);
+    }
+
+    @GetMapping("/subcategory/{subcategoryId}")
+    public ResponseEntity<?> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
+                                                   Pageable pageable) {
+        Page<Product> productsPage;
+        try {
+            productsPage = productService.getProductBySubcategory(subcategory, pageable);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(productMapper.fromObjectListToDtoList(productsPage.getContent()));
     }
 
     @PostMapping
