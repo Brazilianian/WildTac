@@ -87,4 +87,22 @@ public class CategoryService {
                 .filter(s -> s.getName().equals(subcategory.getName()))
                 .findFirst().get();
     }
+
+    /**
+     *
+     * @param category - new category with id of old category
+     * @return category - updated category
+     * @throws EntityNotFoundException - if category was not found by id
+     */
+    public Category redactCategory(Category category) {
+        Optional<Category> categoryOptional = categoryRepo.findById(category.getId());
+        if (categoryOptional.isEmpty()) {
+            log.warn(String.format("Failed to redact - the category with id %s was not found", category.getId()));
+            throw new EntityNotFoundException(String.format("The category with id %s was not found", category.getId()));
+        }
+
+        Category updatedCategory = categoryRepo.save(category);
+        log.info(String.format("Category %s was updated", category.getName()));
+        return updatedCategory;
+    }
 }

@@ -55,5 +55,17 @@ public class CategoryController {
 
         return ResponseEntity.ok(categoryMapper.fromObjectToDto(createdCategory));
     }
+
+    @PutMapping
+    public ResponseEntity<?> redactCategory(@RequestBody CategoryDto category) {
+        Category updatedCategory;
+        try {
+            updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(categoryMapper.fromObjectToDto(updatedCategory));
+    }
 }
 
