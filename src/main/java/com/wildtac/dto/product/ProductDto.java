@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,4 +27,6 @@ public class ProductDto {
     private double currentCount;
     private double saleCount;
     private SubcategoryDto subcategory;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 }

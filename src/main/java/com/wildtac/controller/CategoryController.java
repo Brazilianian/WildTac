@@ -3,7 +3,6 @@ package com.wildtac.controller;
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.dto.product.category.CategoryDto;
 import com.wildtac.mapper.CategoryMapper;
-import com.wildtac.repository.CategoryRepo;
 import com.wildtac.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +32,11 @@ public class CategoryController {
         return categoryMapper.fromObjectListToDtoList(categories);
     }
 
-    @GetMapping("/{categoryName}")
-    public ResponseEntity<?> getCategoryByName(@PathVariable(name = "categoryName") String categoryName) {
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<?> getCategoryByName(@PathVariable(name = "categoryId") Long categoryId) {
         Category category;
         try {
-            category = categoryService.getCategoryByName(categoryName);
+            category = categoryService.getCategoryById(categoryId);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

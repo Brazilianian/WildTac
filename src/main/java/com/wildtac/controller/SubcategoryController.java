@@ -13,7 +13,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/api/v1/category/{categoryName}/subcategory")
+@RequestMapping("/api/v1/category/{categoryId}/subcategory")
 public class SubcategoryController {
 
     private final CategoryService categoryService;
@@ -25,11 +25,11 @@ public class SubcategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createSubcategory(@PathVariable(name = "categoryName") String categoryName,
+    public ResponseEntity<?> createSubcategory(@PathVariable(name = "categoryId") Long categoryId,
                                                @RequestBody SubcategoryDto subcategoryDto) {
         Category category;
         try {
-            category = categoryService.getCategoryByName(categoryName);
+            category = categoryService.getCategoryById(categoryId);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

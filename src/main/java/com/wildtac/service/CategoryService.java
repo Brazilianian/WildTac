@@ -44,16 +44,18 @@ public class CategoryService {
 
     /**
      *
-     * @param categoryName - name of the category
-     * @return category by the requested name
+     * @param categoryId - id of the category
+     * @return category by the requested id
      * @throws EntityNotFoundException if category was not found
      */
-    public Category getCategoryByName(String categoryName) {
-        if (!categoryRepo.existsByName(categoryName)) {
-            throw new EntityNotFoundException(String.format("Category %s was not found", categoryName));
+    public Category getCategoryById(Long categoryId) {
+        Optional<Category> categoryOptional = categoryRepo.findById(categoryId);
+
+        if (categoryOptional.isEmpty()) {
+            throw new EntityNotFoundException(String.format("Category %s was not found", categoryId));
         }
 
-        return categoryRepo.findByName(categoryName);
+        return categoryOptional.get();
     }
 
     /**
