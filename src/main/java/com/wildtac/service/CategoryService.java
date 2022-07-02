@@ -22,7 +22,6 @@ public class CategoryService {
     }
 
     /**
-     *
      * @param category - category of the product
      * @return Category - created category
      * @throws EntityExistsException if category with the same name already exists
@@ -43,7 +42,6 @@ public class CategoryService {
     }
 
     /**
-     *
      * @param categoryId - id of the category
      * @return category by the requested id
      * @throws EntityNotFoundException if category was not found
@@ -59,8 +57,7 @@ public class CategoryService {
     }
 
     /**
-     *
-     * @param category - category of subcategory
+     * @param category    - category of subcategory
      * @param subcategory - new subcategory you would like to add
      * @return subcategory - added subcategory
      * @throws EntityExistsException - if subcategory with the same name already exists
@@ -89,7 +86,6 @@ public class CategoryService {
     }
 
     /**
-     *
      * @param category - new category with id of old category
      * @return category - updated category
      * @throws EntityNotFoundException - if category was not found by id

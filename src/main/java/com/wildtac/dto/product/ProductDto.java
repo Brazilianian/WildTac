@@ -26,7 +26,7 @@ public class ProductDto {
     private String description;
     private double currentCount;
     private double saleCount;
-    private SubcategoryDto subcategory;
+    private Long subcategoryId;
     private LocalDateTime created;
     private LocalDateTime updated;
 }

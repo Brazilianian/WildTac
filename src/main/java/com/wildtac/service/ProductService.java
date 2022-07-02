@@ -1,9 +1,7 @@
 package com.wildtac.service;
 
 import com.wildtac.domain.product.Product;
-import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
-import com.wildtac.repository.CategoryRepo;
 import com.wildtac.repository.ProductRepo;
 import com.wildtac.repository.SubcategoryRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +30,6 @@ public class ProductService {
 
 
     /**
-     *
      * @param product - new product
      * @return createdProduct - product that was created
      * @throws EntityNotFoundException - if subcategory was not found by id
@@ -56,9 +53,9 @@ public class ProductService {
      * @throws EntityNotFoundException if product was not found
      */
     public Product getProduct(Long id) {
-       return productRepo
-               .findById(id)
-               .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %s was not found", id)));
+        return productRepo
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %s was not found", id)));
     }
 
     /**
@@ -91,9 +88,8 @@ public class ProductService {
     }
 
     /**
-     *
      * @param subcategoryId - id of subcategory of the products
-     * @param pageable - info about page of products
+     * @param pageable      - info about page of products
      * @return Page<Product> - page of products
      * @throws EntityNotFoundException if the subcategory does not exist
      */
