@@ -21,7 +21,6 @@ public class ProductDto {
     private List<CharacteristicDto> characteristics;
     private double discount;
     private List<FeedbackDto> feedbacks;
-    private List<ImageDto> images;
     private String linkYoutube;
     private String description;
     private double currentCount;

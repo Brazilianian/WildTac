@@ -1,7 +1,8 @@
-package com.wildtac.mapper;
+package com.wildtac.mapper.product;
 
 import com.wildtac.domain.product.Product;
 import com.wildtac.dto.product.ProductDto;
+import com.wildtac.mapper.StructMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductMapper implements StructMapper<ProductDto, Product>{
+public class ProductMapper implements StructMapper<ProductDto, Product> {
 
     private final ModelMapper modelMapper;
 

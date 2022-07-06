@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 @Getter
 @Setter
@@ -15,12 +16,16 @@ public class Image extends BaseEntity {
     @Lob
     private String content;
 
+    private Long parentId;
+
     public Image() {
         super();
     }
 
-    public Image(String content) {
+    public Image(String content, Long parentId) {
         super();
+
         this.content = content;
+        this.parentId = parentId;
     }
 }

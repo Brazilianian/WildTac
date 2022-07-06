@@ -1,8 +1,9 @@
-package com.wildtac.mapper;
+package com.wildtac.mapper.product.category;
 
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
 import com.wildtac.dto.product.category.SubcategoryDto;
+import com.wildtac.mapper.StructMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;

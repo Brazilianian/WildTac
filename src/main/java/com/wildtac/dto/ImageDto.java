@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class ImageDto {
     private Long id;
     private String content;
+    private Long parentId;
     private LocalDateTime created;
     private LocalDateTime updated;
 }

@@ -1,7 +1,8 @@
-package com.wildtac.mapper;
+package com.wildtac.mapper.product.category;
 
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.dto.product.category.CategoryDto;
+import com.wildtac.mapper.StructMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryMapper implements StructMapper<CategoryDto, Category>{
+public class CategoryMapper implements StructMapper<CategoryDto, Category> {
 
     private final ModelMapper modelMapper;
 

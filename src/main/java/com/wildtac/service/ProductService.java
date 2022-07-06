@@ -1,5 +1,6 @@
 package com.wildtac.service;
 
+import com.wildtac.domain.Image;
 import com.wildtac.domain.product.Product;
 import com.wildtac.domain.product.category.Subcategory;
 import com.wildtac.repository.ProductRepo;
@@ -30,6 +31,7 @@ public class ProductService {
 
 
     /**
+     * The method saves new product to DB
      * @param product - new product
      * @return createdProduct - product that was created
      * @throws EntityNotFoundException - if subcategory was not found by id
@@ -42,23 +44,33 @@ public class ProductService {
         }
 
         product.setSubcategory(subcategoryOptional.get());
+
         Product createdProduct = productRepo.save(product);
+
+        for (Image image : product.getImages()) {
+            image.setParentId(createdProduct.getId());
+        }
+
+        createdProduct = productRepo.save(product);
+
         log.info(String.format("Product '%s' was saved", createdProduct.getName()));
         return createdProduct;
     }
 
     /**
+     * The method finds product by field 'id'
      * @param id - field of product
      * @return Product
      * @throws EntityNotFoundException if product was not found
      */
-    public Product getProduct(Long id) {
+    public Product getProductById(Long id) {
         return productRepo
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %s was not found", id)));
     }
 
     /**
+     * The method changes product status to 'DELETED'
      * @param id - field of product
      * @throws EntityNotFoundException if product was not found
      */
@@ -72,6 +84,7 @@ public class ProductService {
     }
 
     /**
+     * The method redacts product and saves new changes to DB
      * @param product - product with redacted data
      * @return Product - redacted product
      * @throws EntityNotFoundException if product was not found
@@ -88,6 +101,7 @@ public class ProductService {
     }
 
     /**
+     * The method is returned page of product by the pageable info
      * @param subcategoryId - id of subcategory of the products
      * @param pageable      - info about page of products
      * @return Page<Product> - page of products
