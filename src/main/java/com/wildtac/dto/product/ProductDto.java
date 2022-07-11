@@ -1,7 +1,5 @@
 package com.wildtac.dto.product;
 
-import com.wildtac.dto.ImageDto;
-import com.wildtac.dto.product.category.SubcategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +24,7 @@ public class ProductDto {
     private double currentCount;
     private double saleCount;
     private Long subcategoryId;
+    private Long categoryId;
     private LocalDateTime created;
     private LocalDateTime updated;
 }

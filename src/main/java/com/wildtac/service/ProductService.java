@@ -43,6 +43,7 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to create new product - the subcategory with id %s does not exist", product.getSubcategory().getId())));
 
         product.setSubcategory(subcategory);
+        product.setCategory(subcategory.getCategory());
 
         Product createdProduct = productRepo.save(product);
 

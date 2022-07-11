@@ -74,6 +74,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public List<ImageDto> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
         List<Image> productImages = imageService.getImagesByParentId(productId);
+
         return imageMapper.fromObjectListToDtoList(productImages);
     }
 

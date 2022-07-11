@@ -16,9 +16,11 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepo categoryRepo;
+    private final ImageService imageService;
 
-    public CategoryService(CategoryRepo categoryRepo) {
+    public CategoryService(CategoryRepo categoryRepo, ImageService imageService) {
         this.categoryRepo = categoryRepo;
+        this.imageService = imageService;
     }
 
     /**
@@ -69,16 +71,22 @@ public class CategoryService {
         }
 
         category.getSubcategories().add(subcategory);
+        subcategory.setCategory(category);
 
         Category updatedCategory = categoryRepo.save(category);
 
-        log.info(String.format("Failed to add subcategory to category - the subcategory %s of category %s was created", subcategory.getName(), category.getName()));
+        updatedCategory.getImage().setParentId(updatedCategory.getId());
+        imageService.saveImage(updatedCategory.getImage());
+
+        updatedCategory = categoryRepo.save(category);
+
+        log.info(String.format("The subcategory %s of category %s was created", subcategory.getName(), category.getName()));
 
         return updatedCategory.getSubcategories()
                 .stream()
                 .filter(s -> s.getName().equals(subcategory.getName()))
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Subcategory %s was not found in category %s", subcategory.getName(), category.getName())));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to add subcategory to category - subcategory %s was not found in category %s", subcategory.getName(), category.getName())));
     }
 
     /**

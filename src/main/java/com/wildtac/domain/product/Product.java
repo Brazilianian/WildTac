@@ -2,6 +2,7 @@ package com.wildtac.domain.product;
 
 import com.wildtac.domain.BaseEntity;
 import com.wildtac.domain.Image;
+import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,9 @@ public class Product extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Subcategory subcategory;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    private Category category;
 
     public Product() {
         super();
