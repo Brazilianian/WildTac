@@ -1,6 +1,5 @@
 package com.wildtac.dto.product.category;
 
-import com.wildtac.dto.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,6 @@ public class CategoryDto {
     private Long id;
     private String name;
     private List<SubcategoryDto> subcategories = new ArrayList<>();
-    private ImageDto image;
     private LocalDateTime created;
     private LocalDateTime updated;
 }
