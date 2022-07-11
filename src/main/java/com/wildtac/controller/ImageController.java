@@ -7,8 +7,10 @@ import com.wildtac.service.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/v1/image")
+@RequestMapping("/api/v1/")
 public class ImageController {
 
     private final ImageService imageService;
@@ -19,7 +21,7 @@ public class ImageController {
         this.imageMapper = imageMapper;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/image/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ImageDto getImageById(@PathVariable Long id) {
@@ -28,12 +30,20 @@ public class ImageController {
         return imageMapper.fromObjectToDto(image);
     }
 
-    @PostMapping
+    @PostMapping("/image")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ImageDto createImage(@RequestBody ImageDto imageDto) {
         Image image = imageService.saveImage(imageMapper.fromDtoToObject(imageDto));
 
         return imageMapper.fromObjectToDto(image);
+    }
+
+    @GetMapping("/image-parent/{parentId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ImageDto> getImagesByParentId(@PathVariable(name = "parentId") Long parentId) {
+        List<Image> images = imageService.getImagesByParentId(parentId);
+        return imageMapper.fromObjectListToDtoList(images);
     }
 }
