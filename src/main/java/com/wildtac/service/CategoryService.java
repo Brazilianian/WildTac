@@ -1,5 +1,6 @@
 package com.wildtac.service;
 
+import com.sun.jdi.InternalException;
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
 import com.wildtac.repository.CategoryRepo;
@@ -34,6 +35,10 @@ public class CategoryService {
         }
 
         Category categoryCreated = categoryRepo.save(category);
+
+        categoryCreated.getImage().setParentId(categoryCreated.getId());
+        imageService.saveImage(categoryCreated.getImage());
+
         log.info(String.format("Category %s was saved", category.getName()));
         return categoryCreated;
     }
@@ -73,20 +78,19 @@ public class CategoryService {
         category.getSubcategories().add(subcategory);
         subcategory.setCategory(category);
 
-        Category updatedCategory = categoryRepo.save(category);
+        Category categoryUpdated = categoryRepo.save(category);
 
-        updatedCategory.getImage().setParentId(updatedCategory.getId());
-        imageService.saveImage(updatedCategory.getImage());
-
-        updatedCategory = categoryRepo.save(category);
-
-        log.info(String.format("The subcategory %s of category %s was created", subcategory.getName(), category.getName()));
-
-        return updatedCategory.getSubcategories()
+        Subcategory subcategoryCreated = categoryUpdated.getSubcategories()
                 .stream()
                 .filter(s -> s.getName().equals(subcategory.getName()))
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to add subcategory to category - subcategory %s was not found in category %s", subcategory.getName(), category.getName())));
+                .orElseThrow(() -> new InternalException("Subcategory was not found"));
+
+        subcategoryCreated.getImage().setParentId(subcategoryCreated.getId());
+        imageService.saveImage(subcategoryCreated.getImage());
+
+        log.info(String.format("The subcategory %s of category %s was created", subcategory.getName(), category.getName()));
+        return subcategoryCreated;
     }
 
     /**
