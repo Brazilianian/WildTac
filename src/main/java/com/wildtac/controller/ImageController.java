@@ -5,10 +5,7 @@ import com.wildtac.dto.ImageDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.service.ImageService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/image")
@@ -23,15 +20,12 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getImageById(@PathVariable Long id) {
-        Image image;
-        try {
-            image = imageService.getImageById(id);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ImageDto getImageById(@PathVariable Long id) {
+        Image image = imageService.getImageById(id);
 
-        return ResponseEntity.ok(imageMapper.fromObjectToDto(image));
+        return imageMapper.fromObjectToDto(image);
     }
 
     @PostMapping

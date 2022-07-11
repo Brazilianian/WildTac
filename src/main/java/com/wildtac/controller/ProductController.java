@@ -44,7 +44,7 @@ public class ProductController {
     @GetMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductDto> getProducts(@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable) {
+    public List<ProductDto> getProducts(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Product> products = productService.getAllProducts(pageable);
 
         return productMapper.fromObjectListToDtoList(products.getContent());
@@ -63,7 +63,7 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductDto> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
-                                                   Pageable pageable) {
+                                                  Pageable pageable) {
         Page<Product> productsPage = productService.getProductBySubcategory(subcategory, pageable);
 
         return new PageImpl<>(productMapper.fromObjectListToDtoList(productsPage.getContent()));
@@ -92,14 +92,11 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<?> redactProduct(@RequestBody ProductDto product) {
-        Product redactedProduct;
-        try {
-            redactedProduct = productService.redactProduct(productMapper.fromDtoToObject(product));
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto redactProduct(@RequestBody ProductDto product) {
+        Product redactedProduct = productService.redactProduct(productMapper.fromDtoToObject(product));
 
-        return ResponseEntity.ok(productMapper.fromObjectToDto(redactedProduct));
+        return productMapper.fromObjectToDto(redactedProduct);
     }
 }

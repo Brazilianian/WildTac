@@ -5,11 +5,8 @@ import com.wildtac.dto.product.category.CategoryDto;
 import com.wildtac.mapper.product.category.CategoryMapper;
 import com.wildtac.service.CategoryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -33,39 +30,30 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<?> getCategoryByName(@PathVariable(name = "categoryId") Long categoryId) {
-        Category category;
-        try {
-            category = categoryService.getCategoryById(categoryId);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto getCategoryByName(@PathVariable(name = "categoryId") Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
 
-        return ResponseEntity.ok(categoryMapper.fromObjectToDto(category));
+        return categoryMapper.fromObjectToDto(category);
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody CategoryDto category) {
-        Category createdCategory;
-        try {
-            createdCategory = categoryService.createCategory(categoryMapper.fromDtoToObject(category));
-        } catch (EntityExistsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryDto createCategory(@RequestBody CategoryDto category) {
+        Category createdCategory = categoryService.createCategory(categoryMapper.fromDtoToObject(category));
 
-        return ResponseEntity.ok(categoryMapper.fromObjectToDto(createdCategory));
+        return categoryMapper.fromObjectToDto(createdCategory);
     }
 
     @PutMapping
-    public ResponseEntity<?> redactCategory(@RequestBody CategoryDto category) {
-        Category updatedCategory;
-        try {
-            updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto redactCategory(@RequestBody CategoryDto category) {
+        Category updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));
 
-        return ResponseEntity.ok(categoryMapper.fromObjectToDto(updatedCategory));
+        return categoryMapper.fromObjectToDto(updatedCategory);
     }
 }
 

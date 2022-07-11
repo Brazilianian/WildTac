@@ -28,12 +28,12 @@ public class CategoryService {
      */
     public Category createCategory(Category category) {
         if (categoryRepo.existsByName(category.getName())) {
-            log.warn(String.format("Failed to create category - the category %s already exists", category.getName()));
-            throw new EntityExistsException(String.format("Category %s already exists", category.getName()));
+            throw new EntityExistsException(String.format("Failed to create new category - the category %s already exists", category.getName()));
         }
 
+        Category categoryCreated = categoryRepo.save(category);
         log.info(String.format("Category %s was saved", category.getName()));
-        return categoryRepo.save(category);
+        return categoryCreated;
     }
 
 
@@ -47,13 +47,9 @@ public class CategoryService {
      * @throws EntityNotFoundException if category was not found
      */
     public Category getCategoryById(Long categoryId) {
-        Optional<Category> categoryOptional = categoryRepo.findById(categoryId);
 
-        if (categoryOptional.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Category %s was not found", categoryId));
-        }
-
-        return categoryOptional.get();
+        return categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Category %s was not found", categoryId)));
     }
 
     /**
@@ -69,20 +65,20 @@ public class CategoryService {
                 .findFirst();
 
         if (subcategoryOptional.isPresent()) {
-            log.warn(String.format("Failed to create subcategory - the subcategory %s of category %s already exists", subcategory.getName(), category.getName()));
-            throw new EntityExistsException(String.format("Subcategory %s of category %s already exists", subcategory.getName(), category.getName()));
+            throw new EntityExistsException(String.format("Failed to add subcategory to category - the subcategory %s of category %s already exists", subcategory.getName(), category.getName()));
         }
 
         category.getSubcategories().add(subcategory);
 
         Category updatedCategory = categoryRepo.save(category);
 
-        log.info(String.format("Subcategory %s of category %s was created", subcategory.getName(), category.getName()));
+        log.info(String.format("Failed to add subcategory to category - the subcategory %s of category %s was created", subcategory.getName(), category.getName()));
 
         return updatedCategory.getSubcategories()
                 .stream()
                 .filter(s -> s.getName().equals(subcategory.getName()))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Subcategory %s was not found in category %s", subcategory.getName(), category.getName())));
     }
 
     /**
@@ -93,8 +89,7 @@ public class CategoryService {
     public Category redactCategory(Category category) {
         Optional<Category> categoryOptional = categoryRepo.findById(category.getId());
         if (categoryOptional.isEmpty()) {
-            log.warn(String.format("Failed to redact - the category with id %s was not found", category.getId()));
-            throw new EntityNotFoundException(String.format("The category with id %s was not found", category.getId()));
+            throw new EntityNotFoundException(String.format("Failed to redact - the category with id %s was not found", category.getId()));
         }
 
         Category updatedCategory = categoryRepo.save(category);

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,12 +25,9 @@ public class ImageService {
      * @throws EntityNotFoundException - if image was not found by id
      */
     public Image getImageById(Long id) {
-        Optional<Image> imageOptional = imageRepo.findById(id);
-        if (imageOptional.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Image with id '%s' was not found", id));
-        }
 
-        return imageOptional.get();
+        return imageRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Image with id %s was not found", id)));
     }
 
     /**

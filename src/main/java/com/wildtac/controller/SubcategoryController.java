@@ -6,11 +6,7 @@ import com.wildtac.dto.product.category.SubcategoryDto;
 import com.wildtac.mapper.product.category.SubcategoryMapper;
 import com.wildtac.service.CategoryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/category/{categoryId}/subcategory")
@@ -25,22 +21,15 @@ public class SubcategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createSubcategory(@PathVariable(name = "categoryId") Long categoryId,
-                                               @RequestBody SubcategoryDto subcategoryDto) {
-        Category category;
-        try {
-            category = categoryService.getCategoryById(categoryId);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public SubcategoryDto createSubcategory(@PathVariable(name = "categoryId") Long categoryId,
+                                            @RequestBody SubcategoryDto subcategoryDto) {
 
-        Subcategory createdSubcategory;
-        try {
-            createdSubcategory = categoryService.addSubcategoryOfCategory(category, subcategoryMapper.fromDtoToObject(subcategoryDto));
-        } catch (EntityExistsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        Category category = categoryService.getCategoryById(categoryId);
 
-        return ResponseEntity.ok(subcategoryMapper.fromObjectToDto(createdSubcategory));
+        Subcategory createdSubcategory = categoryService.addSubcategoryOfCategory(category, subcategoryMapper.fromDtoToObject(subcategoryDto));
+
+        return subcategoryMapper.fromObjectToDto(createdSubcategory);
     }
 }

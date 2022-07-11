@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,18 +33,16 @@ public class ProductService {
 
     /**
      * The method saves new product to DB
+     *
      * @param product - new product
      * @return createdProduct - product that was created
      * @throws EntityNotFoundException - if subcategory was not found by id
      */
     public Product createProduct(Product product) {
-        Optional<Subcategory> subcategoryOptional = subcategoryRepo.findById(product.getSubcategory().getId());
-        if (subcategoryOptional.isEmpty()) {
-            log.warn(String.format("Failed to create product %s - subcategory with id %s does not exist", product.getName(), product.getSubcategory().getId()));
-            throw new EntityNotFoundException(String.format("Subcategory with id %s does not exist", product.getSubcategory().getId()));
-        }
+        Subcategory subcategory = subcategoryRepo.findById(product.getSubcategory().getId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to create new product - the subcategory with id %s does not exist", product.getSubcategory().getId())));
 
-        product.setSubcategory(subcategoryOptional.get());
+        product.setSubcategory(subcategory);
 
         Product createdProduct = productRepo.save(product);
 
@@ -54,12 +51,13 @@ public class ProductService {
             imageService.saveImage(image);
         }
 
-        log.info(String.format("Product '%s' was saved", createdProduct.getName()));
+        log.info(String.format("Product %s was saved", createdProduct.getName()));
         return createdProduct;
     }
 
     /**
      * The method finds product by field 'id'
+     *
      * @param id - field of product
      * @return Product
      * @throws EntityNotFoundException if product was not found
@@ -72,13 +70,13 @@ public class ProductService {
 
     /**
      * The method changes product status to 'DELETED'
+     *
      * @param id - field of product
      * @throws EntityNotFoundException if product was not found
      */
     public void deleteProduct(Long id) {
         if (!productRepo.existsById(id)) {
-            log.warn(String.format("Deleting failed - product with id %s was not found", id));
-            throw new EntityNotFoundException(String.format("Product with id %s was not found", id));
+            throw new EntityNotFoundException(String.format("Failed to delete product - the product with id %s was not found", id));
         }
         productRepo.deleteById(id);
         log.info(String.format("Product with id %s was deleted", id));
@@ -86,14 +84,14 @@ public class ProductService {
 
     /**
      * The method redacts product and saves new changes to DB
+     *
      * @param product - product with redacted data
      * @return Product - redacted product
      * @throws EntityNotFoundException if product was not found
      */
     public Product redactProduct(Product product) {
         if (!productRepo.existsById(product.getId())) {
-            log.warn(String.format("Redacting failed - product %s was not found", product.getName()));
-            throw new EntityNotFoundException(String.format("Product %s was not found", product.getName()));
+            throw new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName()));
         }
 
         Product redactedProduct = productRepo.save(product);
@@ -103,18 +101,16 @@ public class ProductService {
 
     /**
      * The method is returned page of product by the pageable info
+     *
      * @param subcategoryId - id of subcategory of the products
      * @param pageable      - info about page of products
      * @return Page<Product> - page of products
      * @throws EntityNotFoundException if the subcategory does not exist
      */
     public Page<Product> getProductBySubcategory(Long subcategoryId, Pageable pageable) {
-        Optional<Subcategory> subcategoryOptional = subcategoryRepo.findById(subcategoryId);
+        Subcategory subcategory = subcategoryRepo.findById(subcategoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Subcategory %s was not found", subcategoryId)));
 
-        if (subcategoryOptional.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Subcategory %s was not found", subcategoryId));
-        }
-
-        return productRepo.findBySubcategory_Id(subcategoryOptional.get().getId(), pageable);
+        return productRepo.findBySubcategory_Id(subcategory.getId(), pageable);
     }
 }
