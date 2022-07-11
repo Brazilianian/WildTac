@@ -2,12 +2,15 @@ package com.wildtac.controller;
 
 import com.wildtac.domain.Image;
 import com.wildtac.domain.product.Product;
+import com.wildtac.dto.ImageDto;
+import com.wildtac.dto.product.ProductCreateRequestDto;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.ImageService;
 import com.wildtac.service.ProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -18,6 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
+/**
+ * This controller contains main endpoints of product system
+ * Searching, creating, deleting etc
+ */
 @RestController
 @RequestMapping("/api/v1/product")
 public class ProductController {
@@ -36,6 +43,7 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     public List<ProductDto> getProducts(@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Product> products = productService.getAllProducts(pageable);
 
@@ -43,41 +51,36 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable(name = "id") Long id) {
-        Product product;
-        try {
-            product = productService.getProductById(id);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto getProduct(@PathVariable(name = "id") Long id) {
+        Product product = productService.getProductById(id);
 
-        ProductDto productDto = productMapper.fromObjectToDto(product);
-        return ResponseEntity.ok(productDto);
+        return productMapper.fromObjectToDto(product);
     }
 
     @GetMapping("/subcategory/{subcategoryId}")
-    public ResponseEntity<?> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ProductDto> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
                                                    Pageable pageable) {
-        Page<Product> productsPage;
-        try {
-            productsPage = productService.getProductBySubcategory(subcategory, pageable);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        Page<Product> productsPage = productService.getProductBySubcategory(subcategory, pageable);
 
-        return ResponseEntity.ok(productMapper.fromObjectListToDtoList(productsPage.getContent()));
+        return new PageImpl<>(productMapper.fromObjectListToDtoList(productsPage.getContent()));
     }
 
     @GetMapping("/{id}/images")
-    public ResponseEntity<?> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public List<ImageDto> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
         List<Image> productImages = imageService.getImagesByParentId(productId);
-        return new ResponseEntity<>(imageMapper.fromObjectListToDtoList(productImages), HttpStatus.OK);
+        return imageMapper.fromObjectListToDtoList(productImages);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductCreateRequestDto productDto) {
         Product createdProduct = productService.createProduct(productMapper.fromDtoToObject(productDto));
 
         return ResponseEntity.ok(productMapper.fromObjectToDto(createdProduct));

@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 
 @Getter
 @Setter

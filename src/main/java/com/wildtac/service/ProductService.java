@@ -19,10 +19,12 @@ public class ProductService {
 
     private final ProductRepo productRepo;
     private final SubcategoryRepo subcategoryRepo;
+    private final ImageService imageService;
 
-    public ProductService(ProductRepo productRepo, SubcategoryRepo subcategoryRepo) {
+    public ProductService(ProductRepo productRepo, SubcategoryRepo subcategoryRepo, ImageService imageService) {
         this.productRepo = productRepo;
         this.subcategoryRepo = subcategoryRepo;
+        this.imageService = imageService;
     }
 
     public Page<Product> getAllProducts(Pageable pageable) {
@@ -49,9 +51,8 @@ public class ProductService {
 
         for (Image image : product.getImages()) {
             image.setParentId(createdProduct.getId());
+            imageService.saveImage(image);
         }
-
-        createdProduct = productRepo.save(product);
 
         log.info(String.format("Product '%s' was saved", createdProduct.getName()));
         return createdProduct;
