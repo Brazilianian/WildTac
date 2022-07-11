@@ -1,4 +1,4 @@
-package com.wildtac.dto.product;
+package com.wildtac.dto.product.category;
 
 import com.wildtac.dto.image.ImageDto;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductCreateRequestDto extends ProductDto{
-    private List<ImageDto> images;
+public class SubcategoryCreateRequestDto extends SubcategoryDto{
+    private ImageDto image;
 }

@@ -1,8 +1,7 @@
 package com.wildtac.mapper;
 
 import com.wildtac.domain.Image;
-import com.wildtac.domain.product.Product;
-import com.wildtac.dto.ImageDto;
+import com.wildtac.dto.image.ImageDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.wildtac.controller;
 
 import com.wildtac.domain.Image;
 import com.wildtac.domain.product.Product;
-import com.wildtac.dto.ImageDto;
+import com.wildtac.dto.image.ImageDto;
 import com.wildtac.dto.product.ProductCreateRequestDto;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.mapper.ImageMapper;
@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**

@@ -1,6 +1,7 @@
 package com.wildtac.controller;
 
 import com.wildtac.domain.product.category.Category;
+import com.wildtac.dto.product.category.CategoryCreateRequestDto;
 import com.wildtac.dto.product.category.CategoryDto;
 import com.wildtac.mapper.product.category.CategoryMapper;
 import com.wildtac.service.CategoryService;
@@ -41,7 +42,7 @@ public class CategoryController {
     @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@RequestBody CategoryDto category) {
+    public CategoryDto createCategory(@RequestBody CategoryCreateRequestDto category) {
         Category createdCategory = categoryService.createCategory(categoryMapper.fromDtoToObject(category));
 
         return categoryMapper.fromObjectToDto(createdCategory);
@@ -50,7 +51,7 @@ public class CategoryController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto redactCategory(@RequestBody CategoryDto category) {
+    public CategoryDto redactCategory(@RequestBody CategoryCreateRequestDto category) {
         Category updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));
 
         return categoryMapper.fromObjectToDto(updatedCategory);

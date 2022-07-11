@@ -1,4 +1,4 @@
-package com.wildtac.dto;
+package com.wildtac.dto.image;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

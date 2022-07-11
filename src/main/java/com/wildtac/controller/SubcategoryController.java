@@ -2,6 +2,7 @@ package com.wildtac.controller;
 
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
+import com.wildtac.dto.product.category.SubcategoryCreateRequestDto;
 import com.wildtac.dto.product.category.SubcategoryDto;
 import com.wildtac.mapper.product.category.SubcategoryMapper;
 import com.wildtac.service.CategoryService;
@@ -24,7 +25,7 @@ public class SubcategoryController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public SubcategoryDto createSubcategory(@PathVariable(name = "categoryId") Long categoryId,
-                                            @RequestBody SubcategoryDto subcategoryDto) {
+                                            @RequestBody SubcategoryCreateRequestDto subcategoryDto) {
 
         Category category = categoryService.getCategoryById(categoryId);
 

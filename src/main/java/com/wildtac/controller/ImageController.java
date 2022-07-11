@@ -1,7 +1,7 @@
 package com.wildtac.controller;
 
 import com.wildtac.domain.Image;
-import com.wildtac.dto.ImageDto;
+import com.wildtac.dto.image.ImageDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.service.ImageService;
 import org.springframework.http.HttpStatus;
