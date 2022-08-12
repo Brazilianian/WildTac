@@ -6,11 +6,13 @@ import com.wildtac.domain.product.category.Subcategory;
 import com.wildtac.repository.ProductRepo;
 import com.wildtac.repository.SubcategoryRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -91,11 +93,12 @@ public class ProductService {
      * @throws EntityNotFoundException if product was not found
      */
     public Product redactProduct(Product product) {
-        if (!productRepo.existsById(product.getId())) {
-            throw new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName()));
-        }
 
-        Product redactedProduct = productRepo.save(product);
+        Product productDb = productRepo.findById(product.getId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName())));
+
+        BeanUtils.copyProperties(product, productDb);
+        Product redactedProduct = productRepo.save(productDb);
         log.info(String.format("Product %s was redacted", redactedProduct.getName()));
         return redactedProduct;
     }

@@ -9,6 +9,7 @@ import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.ImageService;
 import com.wildtac.service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

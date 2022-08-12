@@ -20,7 +20,7 @@ public class Product extends BaseEntity {
     private String name;
     private double cost;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Characteristic> characteristics = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class Product extends BaseEntity {
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Subcategory subcategory;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Category category;
 
     public Product() {

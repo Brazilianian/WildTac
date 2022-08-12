@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 @Getter
@@ -15,7 +16,7 @@ import java.util.List;
 @ToString
 public class Characteristic extends BaseEntity {
     private String name;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> values = new ArrayList<>();
 
     public Characteristic() {
