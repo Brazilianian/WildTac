@@ -50,4 +50,12 @@ public class ImageService {
 
         return imageCreated;
     }
+
+    public Image getImageByIdOrCreate(Image image) {
+        if (imageRepo.findById(image.getId()).isEmpty()){
+            return saveImage(image);
+        }
+
+        return imageRepo.findById(image.getId()).get();
+    }
 }

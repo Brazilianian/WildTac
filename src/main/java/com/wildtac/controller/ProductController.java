@@ -13,7 +13,6 @@ import com.wildtac.service.ImageService;
 import com.wildtac.service.ProductService;
 import com.wildtac.service.SubcategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -100,7 +99,9 @@ public class ProductController {
 
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
         product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
-        productDto.getImages().forEach(imageDto -> product.getImages().add(imageService.getImageById(imageDto.getId())));
+        productDto.getImages()
+                .forEach(imageDto ->
+                        product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto))));
 
         Product redactedProduct = productService.redactProduct(product);
         return productMapper.fromObjectToDto(redactedProduct);
