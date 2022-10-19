@@ -7,8 +7,11 @@ import com.wildtac.dto.product.ProductCreateRequestDto;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
+import com.wildtac.service.CategoryService;
 import com.wildtac.service.ImageService;
 import com.wildtac.service.ProductService;
+import com.wildtac.service.SubcategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,19 +30,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/product")
+@AllArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
-
-    public ProductController(ProductService productService, ProductMapper productMapper, ImageService imageService, ImageMapper imageMapper) {
-        this.productService = productService;
-        this.productMapper = productMapper;
-        this.imageService = imageService;
-        this.imageMapper = imageMapper;
-    }
+    private final CategoryService categoryService;
+    private final SubcategoryService subcategoryService;
 
     @GetMapping
     @ResponseBody
@@ -95,9 +94,13 @@ public class ProductController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ProductDto redactProduct(@RequestBody ProductDto product) {
-        Product redactedProduct = productService.redactProduct(productMapper.fromDtoToObject(product));
+    public ProductDto redactProduct(@RequestBody ProductDto productDto) {
+        Product product = productMapper.fromDtoToObject(productDto);
 
+        product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
+        product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
+
+        Product redactedProduct = productService.redactProduct(product);
         return productMapper.fromObjectToDto(redactedProduct);
     }
 }

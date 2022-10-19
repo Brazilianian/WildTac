@@ -32,7 +32,6 @@ public class ProductService {
         return productRepo.findAll(pageable);
     }
 
-
     /**
      * The method saves new product to DB
      *

@@ -6,20 +6,19 @@ import com.wildtac.dto.product.category.SubcategoryCreateRequestDto;
 import com.wildtac.dto.product.category.SubcategoryDto;
 import com.wildtac.mapper.product.category.SubcategoryMapper;
 import com.wildtac.service.CategoryService;
+import com.wildtac.service.SubcategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/category/{categoryId}/subcategory")
+@AllArgsConstructor
 public class SubcategoryController {
 
     private final CategoryService categoryService;
+    private final SubcategoryService subcategoryService;
     private final SubcategoryMapper subcategoryMapper;
-
-    public SubcategoryController(CategoryService categoryService, SubcategoryMapper subcategoryMapper) {
-        this.categoryService = categoryService;
-        this.subcategoryMapper = subcategoryMapper;
-    }
 
     @PostMapping
     @ResponseBody
@@ -29,7 +28,7 @@ public class SubcategoryController {
 
         Category category = categoryService.getCategoryById(categoryId);
 
-        Subcategory createdSubcategory = categoryService.addSubcategoryOfCategory(category, subcategoryMapper.fromDtoToObject(subcategoryDto));
+        Subcategory createdSubcategory = subcategoryService.addSubcategoryOfCategory(category, subcategoryMapper.fromDtoToObject(subcategoryDto));
 
         return subcategoryMapper.fromObjectToDto(createdSubcategory);
     }
