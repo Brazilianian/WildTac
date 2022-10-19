@@ -51,9 +51,16 @@ public class ImageService {
         return imageCreated;
     }
 
+    /**
+     * КОСТЫЛЬ ПИЗДЕЦ
+     * @param image
+     * @param parentId
+     * @return
+     */
     public Image getImageByIdOrCreate(Image image, Long parentId) {
+        image.setParentId(parentId);
+
         if (image.getId() == null) {
-            image.setParentId(parentId);
             return saveImage(image);
         }
 

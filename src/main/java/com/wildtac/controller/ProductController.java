@@ -13,8 +13,6 @@ import com.wildtac.service.ImageService;
 import com.wildtac.service.ProductService;
 import com.wildtac.service.SubcategoryService;
 import lombok.AllArgsConstructor;
-import org.hibernate.engine.internal.Collections;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -102,6 +100,10 @@ public class ProductController {
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
         product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
 
+        product.getImages().forEach(image -> {
+            image.setParentId(0L);
+            imageService.saveImage(image);
+        });
         product.getImages().clear();
 
         for (ImageDto imageDto : productDto.getImages()) {
