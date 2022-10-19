@@ -99,9 +99,12 @@ public class ProductController {
 
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
         product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
-        productDto.getImages()
-                .forEach(imageDto ->
-                        product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto))));
+
+        for (Image image : product.getImages()) {
+            if (image.getId() == null) {
+                image = imageService.saveImage(image);
+            }
+        }
 
         Product redactedProduct = productService.redactProduct(product);
         return productMapper.fromObjectToDto(redactedProduct);
