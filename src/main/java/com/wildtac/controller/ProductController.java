@@ -5,6 +5,7 @@ import com.wildtac.domain.product.Product;
 import com.wildtac.dto.image.ImageDto;
 import com.wildtac.dto.product.ProductCreateRequestDto;
 import com.wildtac.dto.product.ProductDto;
+import com.wildtac.dto.product.ProductRedactRequestDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.CategoryService;
@@ -94,11 +95,12 @@ public class ProductController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ProductDto redactProduct(@RequestBody ProductDto productDto) {
+    public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
         Product product = productMapper.fromDtoToObject(productDto);
 
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
         product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
+        productDto.getImages().forEach(imageDto -> product.getImages().add(imageService.getImageById(imageDto.getId())));
 
         Product redactedProduct = productService.redactProduct(product);
         return productMapper.fromObjectToDto(redactedProduct);
