@@ -98,8 +98,7 @@ public class ProductController {
         Product product = productService.getProductById(productDto.getId());
 
         product.getImages().forEach(image -> {
-            image.setParentId(0L);
-            imageService.saveImage(image);
+           imageService.deleteImageById(image.getId());
         });
 
         product = productMapper.fromDtoToObject(productDto);

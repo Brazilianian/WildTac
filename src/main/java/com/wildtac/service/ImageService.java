@@ -66,4 +66,8 @@ public class ImageService {
 
         return imageRepo.findById(image.getId()).orElse(saveImage(image));
     }
+
+    public void deleteImageById(Long id) {
+        imageRepo.deleteById(id);
+    }
 }
