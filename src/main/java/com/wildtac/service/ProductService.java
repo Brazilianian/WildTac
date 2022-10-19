@@ -93,11 +93,11 @@ public class ProductService {
      */
     public Product redactProduct(Product product) {
 
-        Product productDb = productRepo.findById(product.getId())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName())));
-
-        BeanUtils.copyProperties(product, productDb);
-        Product redactedProduct = productRepo.save(productDb);
+//        Product productDb = productRepo.findById(product.getId())
+//                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName())));
+//
+//        BeanUtils.copyProperties(product, productDb);
+        Product redactedProduct = productRepo.save(product);
         log.info(String.format("Product %s was redacted", redactedProduct.getName()));
         return redactedProduct;
     }
