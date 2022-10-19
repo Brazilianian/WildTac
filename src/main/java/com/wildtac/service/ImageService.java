@@ -51,8 +51,9 @@ public class ImageService {
         return imageCreated;
     }
 
-    public Image getImageByIdOrCreate(Image image) {
+    public Image getImageByIdOrCreate(Image image, Long parentId) {
         if (image.getId() == null) {
+            image.setParentId(parentId);
             return saveImage(image);
         }
 

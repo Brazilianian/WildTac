@@ -105,7 +105,7 @@ public class ProductController {
         product.getImages().clear();
 
         for (ImageDto imageDto : productDto.getImages()) {
-            product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto)));
+            product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto), product.getId()));
         }
 
         Product redactedProduct = productService.redactProduct(product);
