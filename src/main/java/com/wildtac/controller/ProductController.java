@@ -95,16 +95,17 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
-        Product product = productMapper.fromDtoToObject(productDto);
-
-        product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
-        product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
+        Product product = productService.getProductById(productDto.getId());
 
         product.getImages().forEach(image -> {
             image.setParentId(0L);
             imageService.saveImage(image);
         });
-        product.getImages().clear();
+
+        product = productMapper.fromDtoToObject(productDto);
+
+        product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
+        product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
 
         for (ImageDto imageDto : productDto.getImages()) {
             product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto), product.getId()));
