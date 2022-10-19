@@ -52,10 +52,10 @@ public class ImageService {
     }
 
     public Image getImageByIdOrCreate(Image image) {
-        if (imageRepo.findById(image.getId()).isEmpty()){
+        if (image.getId() == null) {
             return saveImage(image);
         }
 
-        return imageRepo.findById(image.getId()).get();
+        return imageRepo.findById(image.getId()).orElse(saveImage(image));
     }
 }
