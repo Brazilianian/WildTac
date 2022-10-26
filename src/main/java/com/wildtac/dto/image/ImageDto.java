@@ -15,6 +15,7 @@ public class ImageDto {
     private Long id;
     private String content;
     private Long parentId;
+    private int index;
     private LocalDateTime created;
     private LocalDateTime updated;
 }

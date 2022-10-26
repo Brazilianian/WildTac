@@ -30,6 +30,23 @@ public class ImageController {
         return imageMapper.fromObjectToDto(image);
     }
 
+    @GetMapping("/image-parent/{parentId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ImageDto> getImagesByParentId(@PathVariable(name = "parentId") Long parentId) {
+        List<Image> images = imageService.getImagesByParentId(parentId);
+        return imageMapper.fromObjectListToDtoList(images);
+    }
+
+    @GetMapping("/image-parent/{parentId}/index/{index}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ImageDto getImageByParentIdAndIndex(@PathVariable(name = "index") Long index,
+                                            @PathVariable(name = "parentId") Long parentId) {
+        Image image = imageService.getImageByParentIdAndIndex(parentId, index);
+        return imageMapper.fromObjectToDto(image);
+    }
+
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -37,13 +54,5 @@ public class ImageController {
         Image image = imageService.saveImage(imageMapper.fromDtoToObject(imageDto));
 
         return imageMapper.fromObjectToDto(image);
-    }
-
-    @GetMapping("/image-parent/{parentId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<ImageDto> getImagesByParentId(@PathVariable(name = "parentId") Long parentId) {
-        List<Image> images = imageService.getImagesByParentId(parentId);
-        return imageMapper.fromObjectListToDtoList(images);
     }
 }

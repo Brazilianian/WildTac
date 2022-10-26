@@ -16,6 +16,7 @@ public class Image extends BaseEntity {
     private String content;
 
     private Long parentId;
+    private int index;
 
     public Image() {
         super();

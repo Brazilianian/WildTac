@@ -1,5 +1,6 @@
 package com.wildtac.service;
 
+import com.wildtac.ImageWasNotFoundException;
 import com.wildtac.domain.Image;
 import com.wildtac.repository.ImageRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -53,5 +54,14 @@ public class ImageService {
 
     public void deleteImageById(Long id) {
         imageRepo.deleteById(id);
+    }
+
+    public Image getImageByParentIdAndIndex(Long parentId, Long index) {
+
+        return getImagesByParentId(parentId)
+                .stream()
+                .filter(image -> image.getIndex() == index)
+                .findFirst()
+                .orElse(null);
     }
 }
