@@ -52,4 +52,8 @@ public class Product extends BaseEntity {
     public Product() {
         super();
     }
+
+    public int getImageCount() {
+        return images.size();
+    }
 }

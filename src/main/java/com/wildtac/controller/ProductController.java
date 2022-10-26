@@ -95,20 +95,10 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
-        Product product = productService.getProductById(productDto.getId());
-
-        product.getImages().forEach(image -> {
-           imageService.deleteImageById(image.getId());
-        });
-
-        product = productMapper.fromDtoToObject(productDto);
+        Product product = productMapper.fromDtoToObject(productDto);
 
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));
         product.setSubcategory(subcategoryService.getSubcategoryById(productDto.getSubcategoryId()));
-
-        for (ImageDto imageDto : productDto.getImages()) {
-            product.getImages().add(imageService.getImageByIdOrCreate(imageMapper.fromDtoToObject(imageDto), product.getId()));
-        }
 
         Product redactedProduct = productService.redactProduct(product);
         return productMapper.fromObjectToDto(redactedProduct);

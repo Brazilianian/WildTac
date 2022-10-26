@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,13 +95,27 @@ public class ProductService {
      */
     public Product redactProduct(Product product) {
 
-//        Product productDb = productRepo.findById(product.getId())
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName())));
-//
-//        BeanUtils.copyProperties(product, productDb);
+        Product productDb = productRepo.findById(product.getId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Failed to redact product - the product %s was not found", product.getName())));
+
+        removeImagesFromProduct(productDb);
+
+        for (Image image : product.getImages()) {
+            image.setParentId(product.getId());
+        }
+
         Product redactedProduct = productRepo.save(product);
         log.info(String.format("Product %s was redacted", redactedProduct.getName()));
         return redactedProduct;
+    }
+
+    private void removeImagesFromProduct(Product productDb) {
+        List<Image> images = new ArrayList<>(productDb.getImages());
+        productDb.getImages().clear();
+        productRepo.save(productDb);
+        for (Image image : images) {
+            imageService.deleteImageById(image.getId());
+        }
     }
 
     /**

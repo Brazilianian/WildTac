@@ -51,22 +51,6 @@ public class ImageService {
         return imageCreated;
     }
 
-    /**
-     * КОСТЫЛЬ ПИЗДЕЦ
-     * @param image
-     * @param parentId
-     * @return
-     */
-    public Image getImageByIdOrCreate(Image image, Long parentId) {
-        image.setParentId(parentId);
-
-        if (image.getId() == null) {
-            return saveImage(image);
-        }
-
-        return imageRepo.findById(image.getId()).orElse(saveImage(image));
-    }
-
     public void deleteImageById(Long id) {
         imageRepo.deleteById(id);
     }
