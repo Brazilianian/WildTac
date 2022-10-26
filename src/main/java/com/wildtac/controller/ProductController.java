@@ -54,6 +54,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public ProductDto getProduct(@PathVariable(name = "id") Long id) {
         Product product = productService.getProductById(id);
+        productService.countOfVisitIncrement(product);
 
         return productMapper.fromObjectToDto(product);
     }

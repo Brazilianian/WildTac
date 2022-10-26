@@ -48,7 +48,7 @@ public class ProductService {
         product.setSubcategory(subcategory);
         product.setCategory(subcategory.getCategory());
 
-        Product createdProduct = productRepo.save(product);
+        Product createdProduct = saveProduct(product);
 
         for (Image image : product.getImages()) {
             image.setParentId(createdProduct.getId());
@@ -104,7 +104,7 @@ public class ProductService {
             image.setParentId(product.getId());
         }
 
-        Product redactedProduct = productRepo.save(product);
+        Product redactedProduct = saveProduct(product);
         log.info(String.format("Product %s was redacted", redactedProduct.getName()));
         return redactedProduct;
     }
@@ -112,7 +112,7 @@ public class ProductService {
     private void removeImagesFromProduct(Product productDb) {
         List<Image> images = new ArrayList<>(productDb.getImages());
         productDb.getImages().clear();
-        productRepo.save(productDb);
+        saveProduct(productDb);
         for (Image image : images) {
             imageService.deleteImageById(image.getId());
         }
@@ -131,5 +131,14 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Subcategory %s was not found", subcategoryId)));
 
         return productRepo.findBySubcategory_Id(subcategory.getId(), pageable);
+    }
+
+    public Product countOfVisitIncrement(Product product) {
+        product.visitCountIncrement();
+        return saveProduct(product);
+    }
+
+    public Product saveProduct(Product product) {
+       return productRepo.save(product);
     }
 }

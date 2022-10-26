@@ -28,4 +28,5 @@ public class ProductDto {
     private LocalDateTime created;
     private LocalDateTime updated;
     private int imageCount;
+    private int visitCount;
 }
