@@ -25,7 +25,14 @@ public class ProductMapper implements StructMapper<ProductDto, Product> {
 
     @Override
     public List<ProductDto> fromObjectListToDtoList(List<Product> products) {
-        return modelMapper.map(products, new TypeToken<List<ProductDto>>() {}.getType());
+        List<ProductDto> productDtoList = modelMapper.map(products, new TypeToken<List<ProductDto>>() {}.getType());
+        productDtoList.forEach(productDto
+                -> productDto.setImageCount(
+                        products
+                                .stream()
+                                .filter(product -> productDto.getId().equals(product.getId()))
+                                .findFirst().get().getImageCount()));
+        return productDtoList;
     }
 
     @Override
@@ -35,6 +42,8 @@ public class ProductMapper implements StructMapper<ProductDto, Product> {
 
     @Override
     public ProductDto fromObjectToDto(Product product) {
-        return modelMapper.map(product, ProductDto.class);
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        productDto.setImageCount(product.getImageCount());
+        return productDto;
     }
 }

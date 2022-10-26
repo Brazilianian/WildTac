@@ -27,4 +27,5 @@ public class ProductDto {
     private Long categoryId;
     private LocalDateTime created;
     private LocalDateTime updated;
+    private int imageCount;
 }
