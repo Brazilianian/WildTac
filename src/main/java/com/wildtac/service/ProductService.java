@@ -133,6 +133,12 @@ public class ProductService {
         return productRepo.findBySubcategory_Id(subcategory.getId(), pageable);
     }
 
+    /**
+     * The method increments count of visits of product
+     *
+     * @param product - product
+     * @return Product - changed product
+     */
     public Product countOfVisitIncrement(Product product) {
         product.visitCountIncrement();
         return saveProduct(product);
