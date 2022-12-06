@@ -20,10 +20,10 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
     private String email;
+    private String phoneNumber;
     private String name;
     private String surname;
     private String address;
-    private String phoneNumber;
     private String password;
 
     private boolean isEnabled;
@@ -51,6 +51,10 @@ public class User extends BaseEntity implements UserDetails {
         return null;
     }
 
+    /**
+     *
+     * @return email of user
+     */
     @Override
     public String getUsername() {
         return email;
@@ -74,5 +78,16 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + getId() + '\'' +
+                "email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 }

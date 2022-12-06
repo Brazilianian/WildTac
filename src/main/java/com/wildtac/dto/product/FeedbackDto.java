@@ -1,6 +1,5 @@
 package com.wildtac.dto.product;
 
-import com.wildtac.dto.user.UserDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
