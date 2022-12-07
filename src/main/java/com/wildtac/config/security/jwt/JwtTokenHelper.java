@@ -1,17 +1,14 @@
 package com.wildtac.config.security.jwt;
 
-import com.wildtac.domain.user.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 @Component
@@ -34,65 +31,60 @@ public class JwtTokenHelper {
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (Exception e) {
-            claims = null;
+        } catch (ExpiredJwtException e) {
+            throw e;
         }
         return claims;
     }
 
-
     public String getUsernameFromToken(String token) {
         String username;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
+        final Claims claims = this.getAllClaimsFromToken(token);
+        username = claims.getSubject();
         return username;
     }
 
-    public String generateToken(String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
-
+    public String generateToken(String username) {
         return Jwts.builder()
-                .setIssuer( appName )
+                .setIssuer(appName)
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
-                .signWith( SIGNATURE_ALGORITHM, secretKey )
+                .signWith(SIGNATURE_ALGORITHM, secretKey)
                 .compact();
     }
 
     private Date generateExpirationDate() {
-        return new Date(new Date().getTime() + expiresIn * 1000);
+        return new Date(new Date().getTime() + expiresIn * 1000L);
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (
-                username != null &&
-                        username.equals(userDetails.getUsername()) &&
-                        !isTokenExpired(token)
-        );
+        return (username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public boolean isTokenExpired(String token) {
-        Date expireDate=getExpirationDate(token);
+        Date expireDate;
+        try {
+            expireDate = getExpirationDate(token);
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
         return expireDate.before(new Date());
     }
-
 
     private Date getExpirationDate(String token) {
         Date expireDate;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             expireDate = claims.getExpiration();
+        } catch (ExpiredJwtException e) {
+            throw e;
         } catch (Exception e) {
             expireDate = null;
         }
         return expireDate;
     }
-
 
     public Date getIssuedAtDateFromToken(String token) {
         Date issueAt;
@@ -105,7 +97,7 @@ public class JwtTokenHelper {
         return issueAt;
     }
 
-    public String getToken(HttpServletRequest request ) {
+    public String getToken(HttpServletRequest request) {
 
         String authHeader = getAuthHeaderFromHeader(request);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -115,7 +107,13 @@ public class JwtTokenHelper {
         return null;
     }
 
-    public String getAuthHeaderFromHeader( HttpServletRequest request ) {
+    public String getAuthHeaderFromHeader(HttpServletRequest request) {
         return request.getHeader("Authorization");
+    }
+
+    public boolean isRefresh(HttpServletRequest request) {
+        String isRefreshHeader = request.getHeader("IsRefresh");
+        StringBuffer requestURL = request.getRequestURL();
+        return (Boolean.parseBoolean(isRefreshHeader) && requestURL.equals("/api/v1/auth/refresh"));
     }
 }

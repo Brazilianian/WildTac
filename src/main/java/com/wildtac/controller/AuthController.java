@@ -9,7 +9,6 @@ import com.wildtac.dto.user.registration.UserRegistrationResponseDto;
 import com.wildtac.mapper.UserMapper;
 import com.wildtac.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     @ResponseBody
-    public UserRegistrationResponseDto registration(UserRegistrationRequestDto userDto) {
+    public UserRegistrationResponseDto registration(@RequestBody UserRegistrationRequestDto userDto) {
         User newUser = userService.createNewUser(userMapper.fromDtoToObject(userDto));
         return (UserRegistrationResponseDto) userMapper.fromObjectToDto(newUser);
     }

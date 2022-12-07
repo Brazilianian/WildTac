@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.wildtac.domain.Status.*;
+
 @Getter
 @Setter
 @Entity
@@ -26,7 +28,6 @@ public class User extends BaseEntity implements UserDetails {
     private String address;
     private String password;
 
-    private boolean isEnabled;
 
     @ElementCollection
     private Set<Role> roles = new HashSet<>();
@@ -62,22 +63,22 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return isEnabled;
+        return getStatus().equals(ENABLED);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isEnabled;
+        return getStatus().equals(ENABLED);
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isEnabled;
+        return getStatus().equals(ENABLED);
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return getStatus().equals(ENABLED);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.wildtac.config.security.jwt;
 
-import com.wildtac.domain.user.User;
 import com.wildtac.service.security.UserSecurityService;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,38 +17,42 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final UserSecurityService userDetailsService;
+    private final UserSecurityService userSecurityService;
     private final JwtTokenHelper jwtTokenHelper;
 
-    public JwtAuthenticationFilter(UserSecurityService userDetailsService,JwtTokenHelper jwtTokenHelper) {
-        this.userDetailsService=userDetailsService;
-        this.jwtTokenHelper=jwtTokenHelper;
-
+    public JwtAuthenticationFilter(UserSecurityService userSecurityService, JwtTokenHelper jwtTokenHelper) {
+        this.userSecurityService = userSecurityService;
+        this.jwtTokenHelper = jwtTokenHelper;
     }
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-
         String authToken = jwtTokenHelper.getToken(request);
 
-        if (null != authToken){
+        if (authToken != null) {
+
+            if (jwtTokenHelper.isTokenExpired(authToken)) {
+                response.setHeader("IsExpired", "true");
+                if (!jwtTokenHelper.isRefresh(request)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+            }
 
             String username = jwtTokenHelper.getUsernameFromToken(authToken);
 
-            if(username != null) {
+            if (username != null) {
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userSecurityService.loadUserByUsername(username);
 
-                if(jwtTokenHelper.validateToken(authToken, userDetails)) {
-
+                if (jwtTokenHelper.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
                 }
 
             }
@@ -56,8 +60,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
-
-
     }
 }

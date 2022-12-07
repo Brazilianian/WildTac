@@ -1,5 +1,6 @@
 package com.wildtac.handler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> catchEntityExistsException(EntityExistsException e) {
         log.warn(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> catchExpiredJwtException(ExpiredJwtException e) {
+        log.warn(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }
