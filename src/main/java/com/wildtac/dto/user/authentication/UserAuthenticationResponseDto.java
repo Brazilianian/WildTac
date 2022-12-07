@@ -1,5 +1,6 @@
 package com.wildtac.dto.user.authentication;
 
+import com.wildtac.dto.BaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

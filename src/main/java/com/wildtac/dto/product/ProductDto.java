@@ -1,5 +1,6 @@
 package com.wildtac.dto.product;
 
+import com.wildtac.dto.product.feedback.FeedbackAbstractDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class ProductDto {
     private double cost;
     private List<CharacteristicDto> characteristics;
     private double discount;
-    private List<FeedbackDto> feedbacks;
+    private List<FeedbackAbstractDto> feedbacks;
     private String linkYoutube;
     private String description;
     private double currentCount;

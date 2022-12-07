@@ -1,12 +1,12 @@
-package com.wildtac.service;
+package com.wildtac.service.product;
 
 import com.wildtac.domain.Image;
 import com.wildtac.domain.product.Product;
 import com.wildtac.domain.product.category.Subcategory;
-import com.wildtac.repository.ProductRepo;
-import com.wildtac.repository.SubcategoryRepo;
+import com.wildtac.repository.product.ProductRepo;
+import com.wildtac.repository.product.category.SubcategoryRepo;
+import com.wildtac.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

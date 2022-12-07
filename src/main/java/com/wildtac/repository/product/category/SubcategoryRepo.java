@@ -1,4 +1,4 @@
-package com.wildtac.repository;
+package com.wildtac.repository.product.category;
 
 import com.wildtac.domain.product.category.Subcategory;
 import org.springframework.data.domain.Page;

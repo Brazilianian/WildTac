@@ -1,4 +1,4 @@
-package com.wildtac.repository;
+package com.wildtac.repository.product;
 
 import com.wildtac.domain.product.Product;
 import org.springframework.data.domain.Page;

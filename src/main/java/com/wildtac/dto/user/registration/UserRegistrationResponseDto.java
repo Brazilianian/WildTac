@@ -5,5 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRegistrationResponseDto extends UserAbstractDto {
+public class UserRegistrationResponseDto extends UserRegistrationAbstractDto {
 }

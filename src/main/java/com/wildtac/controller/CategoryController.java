@@ -4,7 +4,7 @@ import com.wildtac.domain.product.category.Category;
 import com.wildtac.dto.product.category.CategoryCreateRequestDto;
 import com.wildtac.dto.product.category.CategoryDto;
 import com.wildtac.mapper.product.category.CategoryMapper;
-import com.wildtac.service.CategoryService;
+import com.wildtac.service.product.category.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegistrationRequestDto extends UserAbstractDto {
+public class UserRegistrationRequestDto extends UserRegistrationAbstractDto {
     private String password;
 }
