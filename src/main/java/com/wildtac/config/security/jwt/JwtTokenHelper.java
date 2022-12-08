@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtTokenHelper {
@@ -20,7 +21,10 @@ public class JwtTokenHelper {
     private String secretKey;
 
     @Value("${jwt.auth.expires_in}")
-    private int expiresIn;
+    private int tokenExpiresIn;
+
+    @Value("${jwt.auth.refresh_expires_in}")
+    private int refreshTokenExpiresIn;
 
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
@@ -55,7 +59,7 @@ public class JwtTokenHelper {
     }
 
     private Date generateExpirationDate() {
-        return new Date(new Date().getTime() + expiresIn * 1000L);
+        return new Date(new Date().getTime() + tokenExpiresIn * 1000L);
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -114,6 +118,13 @@ public class JwtTokenHelper {
     public boolean isRefresh(HttpServletRequest request) {
         String isRefreshHeader = request.getHeader("IsRefresh");
         StringBuffer requestURL = request.getRequestURL();
-        return (Boolean.parseBoolean(isRefreshHeader) && requestURL.equals("/api/v1/auth/refresh"));
+        return (Boolean.parseBoolean(isRefreshHeader) && requestURL.toString().contains("/api/v1/auth/refresh"));
+    }
+
+    public String generateRefreshToken(Map<String, Object> claims, String subject) {
+
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiresIn))
+                .signWith(SIGNATURE_ALGORITHM, secretKey).compact();
     }
 }

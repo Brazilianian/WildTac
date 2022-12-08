@@ -1,6 +1,7 @@
 package com.wildtac.config.security.jwt;
 
 import com.wildtac.service.security.UserSecurityService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,32 +34,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authToken = jwtTokenHelper.getToken(request);
 
         if (authToken != null) {
+            try {
+                String username = jwtTokenHelper.getUsernameFromToken(authToken);
 
-            if (jwtTokenHelper.isTokenExpired(authToken)) {
-                response.setHeader("IsExpired", "true");
-                if (!jwtTokenHelper.isRefresh(request)) {
-                    filterChain.doFilter(request, response);
-                    return;
+                if (username != null) {
+
+                    UserDetails userDetails = userSecurityService.loadUserByUsername(username);
+
+                    if (jwtTokenHelper.validateToken(authToken, userDetails)) {
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authentication.setDetails(new WebAuthenticationDetails(request));
+
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+
                 }
-            }
-
-            String username = jwtTokenHelper.getUsernameFromToken(authToken);
-
-            if (username != null) {
-
-                UserDetails userDetails = userSecurityService.loadUserByUsername(username);
-
-                if (jwtTokenHelper.validateToken(authToken, userDetails)) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (ExpiredJwtException ex) {
+                if (jwtTokenHelper.isRefresh(request)) {
+                    allowForRefreshToken(ex, request);
+                } else {
+                    request.setAttribute("exception", ex);
+                    response.setHeader("IsExpired", "true");
                 }
-
             }
 
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(null, null, null);
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        request.setAttribute("claims", ex.getClaims());
     }
 }
