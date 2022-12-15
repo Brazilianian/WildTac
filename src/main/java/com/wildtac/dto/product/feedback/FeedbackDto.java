@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class FeedbackDto extends FeedbackAbstractDto{
     private Long id;
-    private FeedbackAuthorDto userDto;
+    private FeedbackAuthorDto author;
 }

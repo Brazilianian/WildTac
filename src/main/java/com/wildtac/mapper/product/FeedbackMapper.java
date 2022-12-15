@@ -2,6 +2,7 @@ package com.wildtac.mapper.product;
 
 import com.wildtac.domain.product.Feedback;
 import com.wildtac.dto.product.feedback.FeedbackAbstractDto;
+import com.wildtac.dto.product.feedback.FeedbackDto;
 import com.wildtac.mapper.StructMapper;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,7 +24,7 @@ public class FeedbackMapper implements StructMapper<FeedbackAbstractDto, Feedbac
 
     @Override
     public List<FeedbackAbstractDto> fromObjectListToDtoList(List<Feedback> feedbackList) {
-        return modelMapper.map(feedbackList, new TypeToken<List<FeedbackAbstractDto>>() {}.getType());
+        return modelMapper.map(feedbackList, new TypeToken<List<FeedbackDto>>() {}.getType());
     }
 
     @Override
@@ -33,6 +34,6 @@ public class FeedbackMapper implements StructMapper<FeedbackAbstractDto, Feedbac
 
     @Override
     public FeedbackAbstractDto fromObjectToDto(Feedback feedback) {
-        return modelMapper.map(feedback, FeedbackAbstractDto.class);
+        return modelMapper.map(feedback, FeedbackDto.class);
     }
 }

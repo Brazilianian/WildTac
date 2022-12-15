@@ -27,9 +27,9 @@ public class Product extends BaseEntity {
 
     private double discount;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @ToString.Exclude
-//    private List<Feedback> feedbacks = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude

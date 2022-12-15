@@ -15,7 +15,7 @@ public class FeedbackService {
 
     public Product addFeedbackToProduct(Product product, Feedback feedback, User author) {
         feedback.setAuthor(author);
-//        product.getFeedbacks().add(feedback);
+        product.getFeedbacks().add(feedback);
         return productRepo.save(product);
     }
 }
