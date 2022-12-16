@@ -4,6 +4,7 @@ import com.wildtac.domain.BaseEntity;
 import com.wildtac.domain.Image;
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
+import com.wildtac.domain.product.feedback.Feedback;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

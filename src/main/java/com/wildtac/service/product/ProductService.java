@@ -146,4 +146,8 @@ public class ProductService {
     public Product saveProduct(Product product) {
        return productRepo.save(product);
     }
+
+    public Product save(Product product) {
+        return productRepo.save(product);
+    }
 }

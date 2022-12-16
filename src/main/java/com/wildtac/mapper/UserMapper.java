@@ -2,6 +2,7 @@ package com.wildtac.mapper;
 
 import com.wildtac.domain.user.User;
 import com.wildtac.dto.user.registration.UserRegistrationAbstractDto;
+import com.wildtac.dto.user.registration.UserRegistrationResponseDto;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,7 +23,7 @@ public class UserMapper implements StructMapper<UserRegistrationAbstractDto, Use
 
     @Override
     public List<UserRegistrationAbstractDto> fromObjectListToDtoList(List<User> userList) {
-        return modelMapper.map(userList, new TypeToken<List<UserRegistrationAbstractDto>>() {}.getType());
+        return modelMapper.map(userList, new TypeToken<List<UserRegistrationResponseDto>>() {}.getType());
     }
 
     @Override
@@ -32,6 +33,6 @@ public class UserMapper implements StructMapper<UserRegistrationAbstractDto, Use
 
     @Override
     public UserRegistrationAbstractDto fromObjectToDto(User user) {
-        return modelMapper.map(user, UserRegistrationAbstractDto.class);
+        return modelMapper.map(user, UserRegistrationResponseDto.class);
     }
 }

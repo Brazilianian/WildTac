@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.wildtac.domain.Status.*;
@@ -27,7 +28,6 @@ public class User extends BaseEntity implements UserDetails {
     private String surname;
     private String address;
     private String password;
-
 
     @ElementCollection
     private Set<Role> roles = new HashSet<>();
@@ -90,5 +90,18 @@ public class User extends BaseEntity implements UserDetails {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, phoneNumber);
     }
 }

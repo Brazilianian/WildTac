@@ -1,6 +1,6 @@
 package com.wildtac.mapper.product;
 
-import com.wildtac.domain.product.Feedback;
+import com.wildtac.domain.product.feedback.Feedback;
 import com.wildtac.dto.product.feedback.FeedbackAbstractDto;
 import com.wildtac.dto.product.feedback.FeedbackDto;
 import com.wildtac.mapper.StructMapper;
@@ -33,7 +33,7 @@ public class FeedbackMapper implements StructMapper<FeedbackAbstractDto, Feedbac
     }
 
     @Override
-    public FeedbackAbstractDto fromObjectToDto(Feedback feedback) {
+    public FeedbackDto fromObjectToDto(Feedback feedback) {
         return modelMapper.map(feedback, FeedbackDto.class);
     }
 }

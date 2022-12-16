@@ -1,9 +1,11 @@
 package com.wildtac.controller;
 
 import com.wildtac.domain.product.Product;
+import com.wildtac.domain.product.feedback.Feedback;
 import com.wildtac.domain.user.User;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.dto.product.feedback.FeedbackCreateRequestDto;
+import com.wildtac.dto.product.feedback.FeedbackDto;
 import com.wildtac.mapper.product.FeedbackMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.product.FeedbackService;
@@ -31,4 +33,25 @@ public class FeedbackController {
         product = feedbackService.addFeedbackToProduct(product, feedbackMapper.fromDtoToObject(feedbackDto), user);
         return productMapper.fromObjectToDto(product);
     }
+
+    @PostMapping("/feedback/{feedbackId}/like")
+    @ResponseBody
+    public FeedbackDto likeFeedback(@AuthenticationPrincipal User user,
+                                   @PathVariable Long feedbackId,
+                                   @PathVariable Long productId) {
+        Product product = productService.getProductById(productId);
+        Feedback feedback = feedbackService.likeFeedback(product, feedbackId, user);
+        return feedbackMapper.fromObjectToDto(feedback);
+    }
+
+    @PostMapping("/feedback/{feedbackId}/dislike")
+    @ResponseBody
+    public FeedbackDto dislikeFeedback(@AuthenticationPrincipal User user,
+                                       @PathVariable Long feedbackId,
+                                       @PathVariable Long productId) {
+        Product product = productService.getProductById(productId);
+        Feedback feedback = feedbackService.dislikeFeedback(product, feedbackId, user);
+        return feedbackMapper.fromObjectToDto(feedback);
+    }
+
 }
