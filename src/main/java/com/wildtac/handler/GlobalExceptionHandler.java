@@ -16,19 +16,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<String> catchEntityNotFoundException(EntityNotFoundException e) {
-        log.warn(e.getMessage(), e);
+        log.warn(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> catchEntityExistsException(EntityExistsException e) {
-        log.warn(e.getMessage(), e);
+        log.warn(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> catchExpiredJwtException(ExpiredJwtException e) {
-        log.warn(e.getMessage(), e);
+        log.warn(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }
