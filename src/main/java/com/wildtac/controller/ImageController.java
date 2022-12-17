@@ -5,6 +5,7 @@ import com.wildtac.dto.image.ImageDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.service.ImageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ImageController {
 
     @GetMapping("/image/{id}")
     @ResponseBody
+    @PreAuthorize("hasAuthority('image:read')")
     @ResponseStatus(HttpStatus.OK)
     public ImageDto getImageById(@PathVariable Long id) {
         Image image = imageService.getImageById(id);
@@ -32,6 +34,7 @@ public class ImageController {
 
     @GetMapping("/image-parent/{parentId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('image:read')")
     @ResponseBody
     public List<ImageDto> getImagesByParentId(@PathVariable(name = "parentId") Long parentId) {
         List<Image> images = imageService.getImagesByParentId(parentId);
@@ -40,6 +43,7 @@ public class ImageController {
 
     @GetMapping("/image-parent/{parentId}/index/{index}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('image:read')")
     @ResponseBody
     public ImageDto getImageByParentIdAndIndex(@PathVariable(name = "index") Long index,
                                             @PathVariable(name = "parentId") Long parentId) {
@@ -49,6 +53,7 @@ public class ImageController {
 
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('image:write')")
     @ResponseBody
     public ImageDto createImage(@RequestBody ImageDto imageDto) {
         Image image = imageService.saveImage(imageMapper.fromDtoToObject(imageDto));

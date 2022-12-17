@@ -9,6 +9,7 @@ import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.product.category.SubcategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,7 @@ public class SubcategoryController {
     @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('category:write')")
     public SubcategoryDto createSubcategory(@PathVariable(name = "categoryId") Long categoryId,
                                             @RequestBody SubcategoryCreateRequestDto subcategoryDto) {
 

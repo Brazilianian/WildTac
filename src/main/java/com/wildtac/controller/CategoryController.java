@@ -6,6 +6,7 @@ import com.wildtac.dto.product.category.CategoryDto;
 import com.wildtac.mapper.product.category.CategoryMapper;
 import com.wildtac.service.product.category.CategoryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public class CategoryController {
 
     @GetMapping
     @ResponseBody
-    public List<CategoryDto> getAllCategories() {
+    @PreAuthorize("hasAuthority('category:read')")
+    public List<CategoryDto> getwAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
 
         return categoryMapper.fromObjectListToDtoList(categories);
@@ -32,6 +34,7 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     @ResponseBody
+    @PreAuthorize("hasAuthority('category:read')")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategoryByName(@PathVariable(name = "categoryId") Long categoryId) {
         Category category = categoryService.getCategoryById(categoryId);
@@ -41,6 +44,7 @@ public class CategoryController {
 
     @PostMapping
     @ResponseBody
+    @PreAuthorize("hasAuthority('category:write')")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody CategoryCreateRequestDto category) {
         Category createdCategory = categoryService.createCategory(categoryMapper.fromDtoToObject(category));
@@ -50,6 +54,7 @@ public class CategoryController {
 
     @PutMapping
     @ResponseBody
+    @PreAuthorize("hasAuthority('category:redact')")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto redactCategory(@RequestBody CategoryCreateRequestDto category) {
         Category updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));

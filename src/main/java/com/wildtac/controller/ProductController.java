@@ -8,9 +8,9 @@ import com.wildtac.dto.product.ProductDto;
 import com.wildtac.dto.product.ProductRedactRequestDto;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
-import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.ImageService;
 import com.wildtac.service.product.ProductService;
+import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.product.category.SubcategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,7 +43,7 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('product:read')")
+    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductDto> getProducts(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Product> products = productService.getAllProducts(pageable);
@@ -53,7 +53,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('product:read')")
+    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public ProductDto getProduct(@PathVariable(name = "id") Long id) {
         Product product = productService.getProductById(id);
@@ -64,7 +64,7 @@ public class ProductController {
 
     @GetMapping("/subcategory/{subcategoryId}")
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('product:read')")
+    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductDto> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
                                                   Pageable pageable) {
@@ -75,7 +75,7 @@ public class ProductController {
 
     @GetMapping("/{id}/images")
     @ResponseBody
-    @PreAuthorize("hasAnyAuthority('product:read')")
+    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ImageDto> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
         List<Image> productImages = imageService.getImagesByParentId(productId);
@@ -85,16 +85,17 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:write')")
     @ResponseBody
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductCreateRequestDto productDto) {
+
         Product createdProduct = productService.createProduct(productMapper.fromDtoToObject(productDto));
 
         return ResponseEntity.ok(productMapper.fromObjectToDto(createdProduct));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:write')")
     public void deleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
     }
@@ -102,7 +103,7 @@ public class ProductController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:write')")
     public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
         Product product = productMapper.fromDtoToObject(productDto);
 

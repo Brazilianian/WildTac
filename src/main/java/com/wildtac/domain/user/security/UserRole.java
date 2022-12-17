@@ -9,7 +9,18 @@ import java.util.stream.Collectors;
 import static com.wildtac.domain.user.security.UserPermission.*;
 
 public enum UserRole {
-    USER(Sets.newHashSet(PRODUCT_READ)), ADMIN(Sets.newHashSet(PRODUCT_READ, PRODUCT_WRITE));
+    USER(Sets.newHashSet(
+            PRODUCT_READ,
+            CATEGORY_READ,
+            FEEDBACK_READ, FEEDBACK_WRITE, FEEDBACK_LIKE,
+            IMAGE_READ
+    )),
+    ADMIN(Sets.newHashSet
+            (PRODUCT_READ, PRODUCT_WRITE, PRODUCT_DELETE, PRODUCT_REDACT,
+                    CATEGORY_READ, CATEGORY_WRITE, CATEGORY_DELETE, CATEGORY_REDACT,
+                    FEEDBACK_READ, FEEDBACK_WRITE, FEEDBACK_LIKE,
+                    IMAGE_READ, IMAGE_WRITE
+    ));
 
     private final Set<UserPermission> permissions;
 

@@ -11,6 +11,7 @@ import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.product.FeedbackService;
 import com.wildtac.service.product.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class FeedbackController {
 
     @PostMapping("/feedback")
     @ResponseBody
+    @PreAuthorize("hasAuthority('feedback:write')")
     public ProductDto sendFeedback(@RequestBody FeedbackCreateRequestDto feedbackDto,
                                    @PathVariable Long productId,
                                    @AuthenticationPrincipal User user) {
@@ -36,6 +38,7 @@ public class FeedbackController {
 
     @PostMapping("/feedback/{feedbackId}/like")
     @ResponseBody
+    @PreAuthorize("hasAuthority('feedback:like')")
     public FeedbackDto likeFeedback(@AuthenticationPrincipal User user,
                                    @PathVariable Long feedbackId,
                                    @PathVariable Long productId) {
@@ -46,6 +49,7 @@ public class FeedbackController {
 
     @PostMapping("/feedback/{feedbackId}/dislike")
     @ResponseBody
+    @PreAuthorize("hasAuthority('feedback:like')")
     public FeedbackDto dislikeFeedback(@AuthenticationPrincipal User user,
                                        @PathVariable Long feedbackId,
                                        @PathVariable Long productId) {
