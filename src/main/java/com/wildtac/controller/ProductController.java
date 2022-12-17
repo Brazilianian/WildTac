@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductDto> getProducts(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Product> products = productService.getAllProducts(pageable);
@@ -51,6 +53,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public ProductDto getProduct(@PathVariable(name = "id") Long id) {
         Product product = productService.getProductById(id);
@@ -61,6 +64,7 @@ public class ProductController {
 
     @GetMapping("/subcategory/{subcategoryId}")
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductDto> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
                                                   Pageable pageable) {
@@ -71,6 +75,7 @@ public class ProductController {
 
     @GetMapping("/{id}/images")
     @ResponseBody
+    @PreAuthorize("hasAnyAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ImageDto> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
         List<Image> productImages = imageService.getImagesByParentId(productId);
@@ -80,6 +85,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('product:write')")
     @ResponseBody
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductCreateRequestDto productDto) {
         Product createdProduct = productService.createProduct(productMapper.fromDtoToObject(productDto));
@@ -88,6 +94,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('product:write')")
     public void deleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
     }
@@ -95,6 +102,7 @@ public class ProductController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('product:write')")
     public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
         Product product = productMapper.fromDtoToObject(productDto);
 
