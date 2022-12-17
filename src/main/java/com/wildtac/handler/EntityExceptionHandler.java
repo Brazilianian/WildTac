@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public class EntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<String> catchEntityAlreadyExistsException(EntityAlreadyExistsException e) {

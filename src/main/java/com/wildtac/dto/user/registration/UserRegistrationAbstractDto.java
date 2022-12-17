@@ -4,11 +4,14 @@ import com.wildtac.dto.BaseDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
 
 @Getter
 @Setter
 public abstract class UserRegistrationAbstractDto extends BaseDto {
+
+    @Email
     protected String email;
+
     protected String phoneNumber;
 }

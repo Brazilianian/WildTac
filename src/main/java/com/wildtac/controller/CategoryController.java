@@ -26,7 +26,7 @@ public class CategoryController {
     @GetMapping
     @ResponseBody
     @PreAuthorize("hasAuthority('category:read')")
-    public List<CategoryDto> getwAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
 
         return categoryMapper.fromObjectListToDtoList(categories);
