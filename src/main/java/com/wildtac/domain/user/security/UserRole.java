@@ -39,4 +39,11 @@ public enum UserRole {
         permissions.add(new SimpleGrantedAuthority("ROLE_" + name()));
         return permissions;
     }
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "permissions=" + permissions +
+                '}';
+    }
 }

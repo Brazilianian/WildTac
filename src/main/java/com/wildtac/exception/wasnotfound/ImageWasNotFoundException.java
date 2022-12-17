@@ -1,6 +1,6 @@
-package com.wildtac;
+package com.wildtac.exception.wasnotfound;
 
-public class ImageWasNotFoundException extends Exception {
+public class ImageWasNotFoundException extends EntityWasNotFoundException {
     public ImageWasNotFoundException() {
         super();
     }

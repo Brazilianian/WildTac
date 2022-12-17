@@ -21,6 +21,7 @@ import java.util.List;
 public class Feedback extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST)
+    @ToString.Exclude
     private User author;
 
     @Lob

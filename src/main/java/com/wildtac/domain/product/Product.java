@@ -36,13 +36,17 @@ public class Product extends BaseEntity {
     @ToString.Exclude
     private List<Image> images = new ArrayList<>();
 
+    @ToString.Exclude
     private String linkYoutube;
 
     @Lob
+    @ToString.Exclude
     private String description;
 
-
+    @ToString.Exclude
     private double currentCount;
+
+    @ToString.Exclude
     private double saleCount;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
@@ -52,6 +56,7 @@ public class Product extends BaseEntity {
     private Category category;
 
     @Setter(AccessLevel.NONE)
+    @ToString.Exclude
     private int visitCount;
 
     public Product() {

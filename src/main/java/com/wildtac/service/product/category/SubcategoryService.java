@@ -3,6 +3,8 @@ package com.wildtac.service.product.category;
 import com.sun.jdi.InternalException;
 import com.wildtac.domain.product.category.Category;
 import com.wildtac.domain.product.category.Subcategory;
+import com.wildtac.exception.alreadyexists.SubcategoryAlreadyExistsException;
+import com.wildtac.exception.wasnotfound.SubcategoryWasNotFoundException;
 import com.wildtac.repository.product.category.CategoryRepo;
 import com.wildtac.repository.product.category.SubcategoryRepo;
 import com.wildtac.service.ImageService;
@@ -10,8 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -23,10 +23,13 @@ public class SubcategoryService {
     private final ImageService imageService;
 
     /**
-     * @param category    - category of subcategory
+     * The method add subcategory to category.
+     * The name of subcategories of category must be unique and can`t be repeated
+     * @param category - category of subcategory
      * @param subcategory - new subcategory you would like to add
      * @return subcategory - added subcategory
-     * @throws EntityExistsException - if subcategory with the same name already exists
+     * @throws SubcategoryAlreadyExistsException - if subcategory with the same name already exists in this category
+     * @throws InternalException - if already saved subcategory was not found in its category. The way of solution - check how entity saves
      */
     public Subcategory addSubcategoryOfCategory(Category category, Subcategory subcategory) {
         Optional<Subcategory> subcategoryOptional = category.getSubcategories()
@@ -35,7 +38,7 @@ public class SubcategoryService {
                 .findFirst();
 
         if (subcategoryOptional.isPresent()) {
-            throw new EntityExistsException(String.format("Failed to add subcategory to category - the subcategory %s of category %s already exists", subcategory.getName(), category.getName()));
+            throw new SubcategoryAlreadyExistsException(String.format("Failed to add subcategory to category - the subcategory %s of category %s already exists", subcategory.getName(), category.getName()));
         }
 
         category.getSubcategories().add(subcategory);
@@ -52,13 +55,19 @@ public class SubcategoryService {
         subcategoryCreated.getImage().setParentId(subcategoryCreated.getId());
         imageService.saveImage(subcategoryCreated.getImage());
 
-        log.info(String.format("The subcategory %s of category %s was created", subcategory.getName(), category.getName()));
+        log.info(String.format("The subcategory '%s' of category '%s' was created", subcategory, category));
         return subcategoryCreated;
     }
 
+    /**
+     * The method finds subcategory by it`s field 'id'
+     * @param subcategoryId - field of subcategory
+     * @return Subcategory
+     * @throws SubcategoryWasNotFoundException - if subcategory was not found
+     */
     public Subcategory getSubcategoryById(Long subcategoryId) {
         return subcategoryRepo
                 .findById(subcategoryId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Subcategory with id %s was not found", subcategoryId)));
+                .orElseThrow(() -> new SubcategoryWasNotFoundException(String.format("Subcategory with id '%s' was not found", subcategoryId)));
     }
 }

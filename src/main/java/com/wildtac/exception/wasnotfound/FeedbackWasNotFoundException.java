@@ -1,6 +1,6 @@
-package com.wildtac.exception;
+package com.wildtac.exception.wasnotfound;
 
-public class FeedbackWasNotFoundException extends RuntimeException {
+public class FeedbackWasNotFoundException extends EntityWasNotFoundException {
     public FeedbackWasNotFoundException() {
         super();
     }

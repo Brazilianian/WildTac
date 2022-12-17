@@ -16,4 +16,11 @@ public enum UserPermission {
     public String getPermission() {
         return permission;
     }
+
+    @Override
+    public String toString() {
+        return "UserPermission{" +
+                "permission='" + permission + '\'' +
+                '}';
+    }
 }

@@ -22,6 +22,7 @@ public class Category extends BaseEntity {
     private List<Subcategory> subcategories = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Image image;
 
     public Category() {

@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 @ToString
 public class Image extends BaseEntity {
     @Lob
+    @ToString.Exclude
     private String content;
 
     private Long parentId;

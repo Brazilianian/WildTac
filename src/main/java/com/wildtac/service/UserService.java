@@ -1,14 +1,14 @@
 package com.wildtac.service;
 
 import com.wildtac.domain.user.User;
+import com.wildtac.exception.alreadyexists.UserAlreadyExistsException;
 import com.wildtac.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
-import static com.wildtac.domain.user.security.UserRole.*;
+import static com.wildtac.domain.user.security.UserRole.USER;
 
 @Service
 @Slf4j
@@ -22,21 +22,22 @@ public class UserService {
     /**
      * Method creates new user.
      * Checks for unique email or phone (depends on which registration way was selected by user)
+     *
      * @param user new user
      * @return User user
-     * @throws EntityExistsException - if user with the same phone number or email already exists
-     * @throws RuntimeException - if there are no claims for registration
+     * @throws UserAlreadyExistsException - if user with the same phone number or email already exists
+     * @throws RuntimeException           - if there are no claims for registration
      */
     public User createNewUser(User user) {
         if (user.getEmail() != null) {
             if (userRepo.existsByEmail(user.getEmail())) {
                 String messageCause = String.format("User with email '%s' already exists", user.getEmail());
-                throw new EntityExistsException(String.format("Failed to create new user with email '%s'\n" + messageCause, user.getEmail()));
+                throw new UserAlreadyExistsException(String.format("Failed to create new user with email '%s'\n" + messageCause, user.getEmail()));
             }
         } else if (user.getPhoneNumber() != null) {
             if (userRepo.existsByPhoneNumber(user.getPhoneNumber())) {
                 String messageCause = String.format("User with phone number '%s' already exists", user.getPhoneNumber());
-                throw new EntityExistsException(String.format("Failed to create new user with phone number '%s'\n" + messageCause, user.getPhoneNumber()));
+                throw new UserAlreadyExistsException(String.format("Failed to create new user with phone number '%s'\n" + messageCause, user.getPhoneNumber()));
             }
         } else {
             String messageCause = "There are no claims";
@@ -48,7 +49,7 @@ public class UserService {
 
         User savedUser = userRepo.save(user);
 
-        log.info(String.format("User %s was saved", user));
+        log.info(String.format("User '%s' was saved", user));
         return savedUser;
     }
 }

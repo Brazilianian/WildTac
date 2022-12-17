@@ -18,6 +18,7 @@ public class Subcategory extends BaseEntity {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Image image;
 
     @OneToOne(cascade = CascadeType.MERGE)
