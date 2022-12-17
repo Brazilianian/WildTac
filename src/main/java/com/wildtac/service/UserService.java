@@ -3,12 +3,12 @@ package com.wildtac.service;
 import com.wildtac.domain.user.User;
 import com.wildtac.repository.UserRepo;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import static com.wildtac.domain.user.security.UserRole.*;
 
 @Service
 @Slf4j
@@ -39,13 +39,15 @@ public class UserService {
                 throw new EntityExistsException(String.format("Failed to create new user with phone number '%s'\n" + messageCause, user.getPhoneNumber()));
             }
         } else {
-            String messageCause = String.format("There are no claims");
+            String messageCause = "There are no claims";
             throw new RuntimeException("Failed to create new user" + messageCause);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(USER);
 
         User savedUser = userRepo.save(user);
+
         log.info(String.format("User %s was saved", user));
         return savedUser;
     }

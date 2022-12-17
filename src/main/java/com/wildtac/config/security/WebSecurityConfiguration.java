@@ -34,8 +34,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/v1/product/*").authenticated()
-                    .antMatchers("/api/v1/auth/*").permitAll()
                     .anyRequest().permitAll()
                 .and()
                     .addFilterBefore(new JwtAuthenticationFilter(userSecurityService, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class);

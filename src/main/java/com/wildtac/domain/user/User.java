@@ -2,19 +2,19 @@ package com.wildtac.domain.user;
 
 
 import com.wildtac.domain.BaseEntity;
+import com.wildtac.domain.user.security.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
-import static com.wildtac.domain.Status.*;
+import static com.wildtac.domain.Status.ENABLED;
 
 @Getter
 @Setter
@@ -28,9 +28,8 @@ public class User extends BaseEntity implements UserDetails {
     private String address;
     private String password;
 
-
-    @ElementCollection
-    private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User() {
         super();
@@ -49,7 +48,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return role.getGrantedAuthority();
     }
 
     /**
