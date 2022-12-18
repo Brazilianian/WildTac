@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @ToString
@@ -16,7 +17,7 @@ import java.util.List;
 public class ProductDto extends BaseDto {
     private Long id;
 
-    @Min(value = 3, message = "Name of product must contains at least 3 symbols")
+    @Size(min = 3, message = "Name of product must contains at least 3 symbols")
     private String name;
 
     @Positive(message = "The price of product can`t be less than zero")
@@ -31,7 +32,7 @@ public class ProductDto extends BaseDto {
     private String linkYoutube;
     private String description;
 
-    @Positive(message = "Count of product can`t be less than zero")
+    @Min(value = 0, message = "Count of product can`t be less than zero")
     private double currentCount;
 
     private double saleCount;

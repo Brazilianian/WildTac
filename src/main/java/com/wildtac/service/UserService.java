@@ -14,10 +14,9 @@ import static com.wildtac.domain.user.security.UserRole.USER;
 @Slf4j
 @AllArgsConstructor
 public class UserService {
+
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
-
-    // TODO: 06.12.2022 set logs
 
     /**
      * Method creates new user.
@@ -40,7 +39,7 @@ public class UserService {
                 throw new UserAlreadyExistsException(String.format("Failed to create new user with phone number '%s'\n" + messageCause, user.getPhoneNumber()));
             }
         } else {
-            String messageCause = "There are no claims";
+            String messageCause = String.format("%nThere are no claims");
             throw new RuntimeException("Failed to create new user" + messageCause);
         }
 

@@ -50,8 +50,16 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public UserAuthenticationResponseDto login(@RequestBody UserAuthenticationRequestDto userDto) {
+
+        String claims;
+        if (userDto.getEmail() != null) {
+            claims = userDto.getEmail();
+        } else {
+            claims = userDto.getPhoneNumber();
+        }
+
         final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                userDto.getEmail(), userDto.getPassword()));
+                claims, userDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

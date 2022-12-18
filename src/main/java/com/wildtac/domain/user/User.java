@@ -58,11 +58,14 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     /**
-     *
-     * @return email of user
+     * The method uses for finding users
+     * @return return phoneNumber if email is null, in other case it returns email
      */
     @Override
     public String getUsername() {
+        if (email == null) {
+            return phoneNumber;
+        }
         return email;
     }
 

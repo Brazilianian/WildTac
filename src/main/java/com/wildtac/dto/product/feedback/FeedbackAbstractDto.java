@@ -6,12 +6,13 @@ import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 public abstract class FeedbackAbstractDto extends BaseDto {
 
-    @Min(value = 1, message = "The feedback can`t be empty")
+    @Size(min = 1, message = "The feedback can`t be empty")
     protected String content;
 
     @Min(value = 0, message = "Mark of feedback can`t be less than 0")
