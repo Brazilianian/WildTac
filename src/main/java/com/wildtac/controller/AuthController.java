@@ -7,7 +7,7 @@ import com.wildtac.dto.user.authentication.UserAuthenticationResponseDto;
 import com.wildtac.dto.user.registration.UserRegistrationRequestDto;
 import com.wildtac.dto.user.registration.UserRegistrationResponseDto;
 import com.wildtac.exception.ValidationException;
-import com.wildtac.mapper.UserMapper;
+import com.wildtac.mapper.user.UserRegstrationMapper;
 import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.impl.DefaultClaims;
@@ -31,7 +31,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final UserRegstrationMapper userMapper;
     private final JwtTokenHelper jwtTokenHelper;
 
     @PostMapping("/registration")

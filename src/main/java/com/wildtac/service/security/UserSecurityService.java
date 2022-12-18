@@ -1,5 +1,6 @@
 package com.wildtac.service.security;
 
+import com.wildtac.domain.user.User;
 import com.wildtac.repository.UserRepo;
 import com.wildtac.service.UserService;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 public class UserSecurityService implements UserDetailsService {
 
     private final UserRepo userRepo;
+    private final UserService userService;
 
     /**
      * The fundamental method of spring security that gives opportunity to load users
@@ -27,13 +29,10 @@ public class UserSecurityService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        boolean isEmail = Pattern.matches("^(.+)@(.+)$", username);
-        if (isEmail) {
-            return userRepo.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email '%s' was not found", username)));
-        } else {
-            return userRepo.findByPhoneNumber(username)
-                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User with phone number '%s' was not found", username)));
+        User user = userService.getUserByEmailOrPhoneNumber(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User with phone number '%s' was not found", username));
         }
+        return user;
     }
 }

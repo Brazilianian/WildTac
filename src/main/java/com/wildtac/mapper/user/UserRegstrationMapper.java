@@ -1,8 +1,9 @@
-package com.wildtac.mapper;
+package com.wildtac.mapper.user;
 
 import com.wildtac.domain.user.User;
 import com.wildtac.dto.user.registration.UserRegistrationAbstractDto;
 import com.wildtac.dto.user.registration.UserRegistrationResponseDto;
+import com.wildtac.mapper.StructMapper;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class UserMapper implements StructMapper<UserRegistrationAbstractDto, User>{
+public class UserRegstrationMapper implements StructMapper<UserRegistrationAbstractDto, User> {
 
     private final ModelMapper modelMapper;
 
