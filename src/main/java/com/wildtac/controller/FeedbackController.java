@@ -6,14 +6,20 @@ import com.wildtac.domain.user.User;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.dto.product.feedback.FeedbackCreateRequestDto;
 import com.wildtac.dto.product.feedback.FeedbackDto;
+import com.wildtac.exception.ValidationException;
 import com.wildtac.mapper.product.FeedbackMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.product.FeedbackService;
 import com.wildtac.service.product.ProductService;
+import com.wildtac.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -28,9 +34,14 @@ public class FeedbackController {
     @PostMapping("/feedback")
     @ResponseBody
     @PreAuthorize("hasAuthority('feedback:write')")
-    public ProductDto sendFeedback(@RequestBody FeedbackCreateRequestDto feedbackDto,
-                                   @PathVariable Long productId,
-                                   @AuthenticationPrincipal User user) {
+    public ProductDto sendFeedback(@PathVariable Long productId,
+                                   @AuthenticationPrincipal User user,
+                                   @RequestBody @Valid FeedbackCreateRequestDto feedbackDto,
+                                   BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
+            throw new ValidationException("Failed to send feedback", errors);
+        }
         Product product = productService.getProductById(productId);
         product = feedbackService.addFeedbackToProduct(product, feedbackMapper.fromDtoToObject(feedbackDto), user);
         return productMapper.fromObjectToDto(product);

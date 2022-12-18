@@ -1,19 +1,19 @@
 package com.wildtac.dto.product.category;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.wildtac.dto.BaseDto;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Min;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SubcategoryDto {
+@Getter
+@Setter
+public class SubcategoryDto extends BaseDto {
     private Long id;
+
+    @Min(value = 3, message = "The name of subcategory must contains at least 3 symbols")
     private String name;
-    private LocalDateTime created;
-    private LocalDateTime updated;
 }

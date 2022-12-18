@@ -10,8 +10,9 @@ import javax.validation.constraints.Email;
 @Setter
 public abstract class UserRegistrationAbstractDto extends BaseDto {
 
-    @Email
+    @Email(message = "Invalid email address")
     protected String email;
 
+    // TODO: 18.12.2022 add pattern to phone number
     protected String phoneNumber;
 }

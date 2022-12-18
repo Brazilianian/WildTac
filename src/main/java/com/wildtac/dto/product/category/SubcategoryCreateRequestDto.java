@@ -1,15 +1,17 @@
 package com.wildtac.dto.product.category;
 
 import com.wildtac.dto.image.ImageDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@Data
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SubcategoryCreateRequestDto extends SubcategoryDto{
+@Getter
+@Setter
+public class SubcategoryCreateRequestDto extends SubcategoryDto {
+
+    @NotNull(message = "Image of subcategory can`t be null")
     private ImageDto image;
 }
