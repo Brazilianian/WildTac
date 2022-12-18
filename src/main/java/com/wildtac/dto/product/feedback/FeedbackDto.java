@@ -12,6 +12,6 @@ import java.util.List;
 public class FeedbackDto extends FeedbackAbstractDto{
     private Long id;
     private FeedbackAuthorDto author;
-    protected List<LikeDislikeDto> likes;
-    protected List<LikeDislikeDto> dislikes;
+    private List<LikeDislikeDto> likes;
+    private List<LikeDislikeDto> dislikes;
 }

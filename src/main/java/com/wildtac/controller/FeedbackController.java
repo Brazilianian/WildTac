@@ -40,7 +40,7 @@ public class FeedbackController {
                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
-            throw new ValidationException("Failed to send feedback", errors);
+            throw new ValidationException(String.format("Failed to send feedback to the product with id '%s' by user '%s'", productId, user), errors);
         }
         Product product = productService.getProductById(productId);
         product = feedbackService.addFeedbackToProduct(product, feedbackMapper.fromDtoToObject(feedbackDto), user);

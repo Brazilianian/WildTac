@@ -2,13 +2,18 @@ package com.wildtac.controller;
 
 import com.wildtac.domain.Image;
 import com.wildtac.dto.image.ImageDto;
+import com.wildtac.exception.ValidationException;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.service.ImageService;
+import com.wildtac.utils.ValidationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -55,7 +60,12 @@ public class ImageController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('image:write')")
     @ResponseBody
-    public ImageDto createImage(@RequestBody ImageDto imageDto) {
+    public ImageDto createImage(@RequestBody @Valid ImageDto imageDto,
+                                BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
+            throw new ValidationException("Failed to create new image", errors);
+        }
         Image image = imageService.saveImage(imageMapper.fromDtoToObject(imageDto));
 
         return imageMapper.fromObjectToDto(image);

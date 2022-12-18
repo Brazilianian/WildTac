@@ -72,7 +72,7 @@ public class CategoryController {
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
-            throw new ValidationException("Failed to redact category", errors);
+            throw new ValidationException(String.format("Failed to redact category with id '%s'", category.getId()), errors);
         }
 
         Category updatedCategory = categoryService.redactCategory(categoryMapper.fromDtoToObject(category));

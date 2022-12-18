@@ -6,12 +6,14 @@ import com.wildtac.dto.image.ImageDto;
 import com.wildtac.dto.product.ProductCreateRequestDto;
 import com.wildtac.dto.product.ProductDto;
 import com.wildtac.dto.product.ProductRedactRequestDto;
+import com.wildtac.exception.ValidationException;
 import com.wildtac.mapper.ImageMapper;
 import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.ImageService;
 import com.wildtac.service.product.ProductService;
 import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.product.category.SubcategoryService;
+import com.wildtac.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,9 +23,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This controller contains main endpoints of product system
@@ -87,15 +92,19 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('product:write')")
     @ResponseBody
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductCreateRequestDto productDto) {
-
+    public ResponseEntity<ProductDto> createProduct(@RequestBody @Valid ProductCreateRequestDto productDto,
+                                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
+            throw new ValidationException("Failed to create new product", errors);
+        }
         Product createdProduct = productService.createProduct(productMapper.fromDtoToObject(productDto));
 
         return ResponseEntity.ok(productMapper.fromObjectToDto(createdProduct));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:delete')")
     public void deleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
     }
@@ -103,8 +112,14 @@ public class ProductController {
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('product:write')")
-    public ProductDto redactProduct(@RequestBody ProductRedactRequestDto productDto) {
+    @PreAuthorize("hasAuthority('product:redact')")
+    public ProductDto redactProduct(@RequestBody @Valid ProductRedactRequestDto productDto,
+                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ValidationUtils.getErrors(bindingResult);
+            throw new ValidationException(String.format("Failed to redact product with id '%s'", productDto.getId()), errors);
+        }
+
         Product product = productMapper.fromDtoToObject(productDto);
 
         product.setCategory(categoryService.getCategoryById(productDto.getCategoryId()));

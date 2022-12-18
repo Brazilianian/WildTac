@@ -44,9 +44,11 @@ public class Product extends BaseEntity {
     private String description;
 
     @ToString.Exclude
+    @Setter(AccessLevel.NONE)
     private double currentCount;
 
     @ToString.Exclude
+    @Setter(AccessLevel.NONE)
     private double saleCount;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

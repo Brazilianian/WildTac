@@ -1,18 +1,14 @@
 package com.wildtac.dto.product;
 
 import com.wildtac.dto.image.ImageDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
+@Getter
+@Setter
 public class ProductCreateRequestDto extends ProductDto{
     private List<ImageDto> images;
 }
