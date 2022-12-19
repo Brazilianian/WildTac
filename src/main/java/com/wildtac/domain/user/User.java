@@ -41,16 +41,6 @@ public class User extends BaseEntity implements UserDetails {
         super();
     }
 
-    public User(String email, String name, String surname, String address, String phoneNumber, String password) {
-        super();
-
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

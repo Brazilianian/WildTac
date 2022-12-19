@@ -27,11 +27,4 @@ public class Subcategory extends BaseEntity {
     public Subcategory() {
         super();
     }
-
-    public Subcategory(String name, Image image) {
-        super();
-
-        this.name = name;
-        this.image = image;
-    }
 }

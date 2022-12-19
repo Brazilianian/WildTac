@@ -17,11 +17,11 @@ public abstract class AbstractFeedbackLikeDislike extends BaseEntity {
     protected User owner;
 
     public AbstractFeedbackLikeDislike(User owner) {
+        super();
         this.owner = owner;
     }
 
     public AbstractFeedbackLikeDislike() {
+        super();
     }
-
-
 }
