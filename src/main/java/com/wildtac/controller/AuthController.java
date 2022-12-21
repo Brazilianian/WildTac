@@ -60,7 +60,7 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public UserAuthenticationResponseDto login(@RequestBody UserAuthenticationRequestDto userDto,
-                                               HttpServletRequest request, HttpServletResponse response) {
+                                               HttpServletResponse response) {
 
         String claims;
         if (userDto.getEmail() != null) {
@@ -100,7 +100,7 @@ public class AuthController {
     public UserAuthenticationResponseDto refreshToken(HttpServletRequest request) {
         String token = jwtRefreshTokenHelper.getTokenFromCookie(request);
         if (token == null) {
-            throw new ExpiredJwtException(null, null, "Refresh token expired");
+            throw new ExpiredJwtException(null, null, "There is no refresh token");
         }
 
         String claims = jwtTokenHelper.getUsernameFromToken(token);
@@ -115,9 +115,5 @@ public class AuthController {
                 .accessToken(accessToken)
                 .user(userMapper.fromObjectToDto(user))
                 .build();
-    }
-
-    private Map<String, Object> getMapFromIoJsonWebTokenClaims(DefaultClaims claims) {
-        return new HashMap<>(claims);
     }
 }

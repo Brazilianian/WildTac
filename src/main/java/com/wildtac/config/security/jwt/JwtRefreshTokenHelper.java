@@ -40,7 +40,7 @@ public class JwtRefreshTokenHelper {
 
         // TODO: 21.12.2022 set expiration date 1 month
         cookie.setMaxAge(30_000);
-        cookie.setSecure(true);
+//        cookie.setSecure(true);
         cookie.setHttpOnly(true);
         return cookie;
     }
