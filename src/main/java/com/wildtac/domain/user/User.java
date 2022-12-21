@@ -9,10 +9,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
 
 import static com.wildtac.domain.Status.ENABLED;
@@ -36,6 +33,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Lob
+    private String refreshToken;
 
     public User() {
         super();

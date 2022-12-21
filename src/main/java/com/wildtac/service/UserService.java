@@ -5,7 +5,6 @@ import com.wildtac.exception.alreadyexists.UserAlreadyExistsException;
 import com.wildtac.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +70,9 @@ public class UserService {
             return userRepo.findByPhoneNumber(claims)
                     .orElse(null);
         }
+    }
+
+    public User save(User user) {
+        return userRepo.save(user);
     }
 }

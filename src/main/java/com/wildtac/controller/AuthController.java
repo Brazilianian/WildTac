@@ -8,10 +8,13 @@ import com.wildtac.dto.user.authentication.UserAuthenticationRequestDto;
 import com.wildtac.dto.user.authentication.UserAuthenticationResponseDto;
 import com.wildtac.dto.user.registration.UserRegistrationRequestDto;
 import com.wildtac.dto.user.registration.UserRegistrationResponseDto;
+import com.wildtac.exception.InvalidJwtTokenException;
 import com.wildtac.exception.ValidationException;
+import com.wildtac.mapper.user.UserMapper;
 import com.wildtac.mapper.user.UserRegstrationMapper;
 import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +24,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +38,8 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final UserRegstrationMapper userMapper;
+    private final UserRegstrationMapper userRegstrationMapper;
+    private final UserMapper userMapper;
     private final JwtTokenHelper jwtTokenHelper;
     private final JwtAccessTokenHelper jwtAccessTokenHelper;
     private final JwtRefreshTokenHelper jwtRefreshTokenHelper;
@@ -47,13 +53,14 @@ public class AuthController {
             throw new ValidationException("Failed to create new user", errors);
         }
 
-        User newUser = userService.createNewUser(userMapper.fromDtoToObject(userDto));
-        return (UserRegistrationResponseDto) userMapper.fromObjectToDto(newUser);
+        User newUser = userService.createNewUser(userRegstrationMapper.fromDtoToObject(userDto));
+        return (UserRegistrationResponseDto) userRegstrationMapper.fromObjectToDto(newUser);
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public UserAuthenticationResponseDto login(@RequestBody UserAuthenticationRequestDto userDto) {
+    public UserAuthenticationResponseDto login(@RequestBody UserAuthenticationRequestDto userDto,
+                                               HttpServletRequest request, HttpServletResponse response) {
 
         String claims;
         if (userDto.getEmail() != null) {
@@ -67,10 +74,23 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtAccessToken = jwtAccessTokenHelper.generateAccessToken(claims);
-        String jwtRefreshToken = jwtRefreshTokenHelper.generateRefreshToken(claims);
+        User user = userService.getUserByEmailOrPhoneNumber(claims);
 
-        UserAuthenticationResponseDto userResponseDto = new UserAuthenticationResponseDto();
+        Cookie jwtRefreshCookie = jwtRefreshTokenHelper.getCookieWithToken(claims);
+
+        user.setRefreshToken(jwtRefreshCookie.getValue());
+        user = userService.save(user);
+
+        String jwtAccessToken = jwtAccessTokenHelper.generateAccessToken(claims);
+
+        UserAuthenticationResponseDto userResponseDto = new UserAuthenticationResponseDto
+                .UserAuthenticationResponseDtoBuilder()
+                .accessToken(jwtAccessToken)
+                .user(userMapper.fromObjectToDto(user))
+                .build();
+
+
+        response.addCookie(jwtRefreshCookie);
 
         return userResponseDto;
     }
@@ -78,15 +98,26 @@ public class AuthController {
     @PostMapping("/refresh")
     @ResponseBody
     public UserAuthenticationResponseDto refreshToken(HttpServletRequest request) {
-        DefaultClaims claims = (DefaultClaims) request.getAttribute("claims");
+        String token = jwtRefreshTokenHelper.getTokenFromCookie(request);
+        if (token == null) {
+            throw new ExpiredJwtException(null, null, "Refresh token expired");
+        }
 
-        Map<String, Object> expectedMap = getMapFromIoJsonWebTokenClaims(claims);
-        String token = jwtTokenHelper.generateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+        String claims = jwtTokenHelper.getUsernameFromToken(token);
+        User user = userService.getUserByEmailOrPhoneNumber(claims);
+        if (!user.getRefreshToken().equals(token)) {
+            throw new InvalidJwtTokenException("Invalid refresh token");
+        }
 
-        return new UserAuthenticationResponseDto(token);
+        String accessToken = jwtAccessTokenHelper.generateAccessToken(claims);
+
+        return new UserAuthenticationResponseDto.UserAuthenticationResponseDtoBuilder()
+                .accessToken(accessToken)
+                .user(userMapper.fromObjectToDto(user))
+                .build();
     }
 
-    private Map<String,Object> getMapFromIoJsonWebTokenClaims(DefaultClaims claims) {
+    private Map<String, Object> getMapFromIoJsonWebTokenClaims(DefaultClaims claims) {
         return new HashMap<>(claims);
     }
 }
