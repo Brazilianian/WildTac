@@ -28,12 +28,4 @@ public class Category extends BaseEntity {
     public Category() {
         super();
     }
-
-    public Category(String name, List<Subcategory> subcategories, Image image) {
-        super();
-
-        this.name = name;
-        this.subcategories = subcategories;
-        this.image = image;
-    }
 }

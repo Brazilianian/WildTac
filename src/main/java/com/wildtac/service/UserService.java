@@ -5,8 +5,11 @@ import com.wildtac.exception.alreadyexists.UserAlreadyExistsException;
 import com.wildtac.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 import static com.wildtac.domain.user.security.UserRole.USER;
 
@@ -50,5 +53,23 @@ public class UserService {
 
         log.info(String.format("User '%s' was saved", user));
         return savedUser;
+    }
+
+    /**
+     * The method uses two different ways of finding users - by email or phoneNumber, where email and phoneNumber are fields of user
+     * If method matches the username with email, it will try to find user by his email
+     * Else it will try to find user by his phone number
+     * @param claims - may contain email or phoneNumber
+     * @return - founded user
+     */
+    public User getUserByEmailOrPhoneNumber(String claims) {
+        boolean isEmail = Pattern.matches("^(.+)@(.+)$", claims);
+        if (isEmail) {
+            return userRepo.findByEmail(claims)
+                    .orElse(null);
+        } else {
+            return userRepo.findByPhoneNumber(claims)
+                    .orElse(null);
+        }
     }
 }

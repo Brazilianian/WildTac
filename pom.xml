@@ -23,6 +23,8 @@
         <jjwt.version>0.9.1</jjwt.version>
         <jackson-databind.version>2.14.1</jackson-databind.version>
         <guava.version>31.1-jre</guava.version>
+        <spring-boot-strarter-validation.version>2.6.8</spring-boot-strarter-validation.version>
+
     </properties>
 
     <dependencies>
@@ -104,7 +106,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-            <version>2.6.8</version>
+            <version>${spring-boot-strarter-validation.version}</version>
         </dependency>
     </dependencies>
 
