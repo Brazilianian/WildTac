@@ -1,5 +1,7 @@
 package com.wildtac.controller;
 
+import com.wildtac.config.security.jwt.JwtAccessTokenHelper;
+import com.wildtac.config.security.jwt.JwtRefreshTokenHelper;
 import com.wildtac.config.security.jwt.JwtTokenHelper;
 import com.wildtac.domain.user.User;
 import com.wildtac.dto.user.authentication.UserAuthenticationRequestDto;
@@ -33,6 +35,8 @@ public class AuthController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final JwtTokenHelper jwtTokenHelper;
+    private final JwtAccessTokenHelper jwtAccessTokenHelper;
+    private final JwtRefreshTokenHelper jwtRefreshTokenHelper;
 
     @PostMapping("/registration")
     @ResponseBody
@@ -63,11 +67,10 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user = (User) authentication.getPrincipal();
-        String jwtToken = jwtTokenHelper.generateToken(user.getUsername());
+        String jwtAccessToken = jwtAccessTokenHelper.generateAccessToken(claims);
+        String jwtRefreshToken = jwtRefreshTokenHelper.generateRefreshToken(claims);
 
         UserAuthenticationResponseDto userResponseDto = new UserAuthenticationResponseDto();
-        userResponseDto.setToken(jwtToken);
 
         return userResponseDto;
     }

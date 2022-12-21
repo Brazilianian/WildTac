@@ -14,19 +14,9 @@ import java.util.Map;
 
 @Component
 public class JwtTokenHelper {
-    @Value("${jwt.auth.app}")
-    private String appName;
 
     @Value("${jwt.auth.secret_key}")
     private String secretKey;
-
-    @Value("${jwt.auth.expires_in}")
-    private int tokenExpiresIn;
-
-    @Value("${jwt.auth.refresh_expires_in}")
-    private int refreshTokenExpiresIn;
-
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
     private Claims getAllClaimsFromToken(String token) {
         Claims claims;
@@ -48,19 +38,6 @@ public class JwtTokenHelper {
         return username;
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setIssuer(appName)
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(generateExpirationDate())
-                .signWith(SIGNATURE_ALGORITHM, secretKey)
-                .compact();
-    }
-
-    private Date generateExpirationDate() {
-        return new Date(new Date().getTime() + tokenExpiresIn * 1000L);
-    }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
@@ -121,10 +98,4 @@ public class JwtTokenHelper {
         return (Boolean.parseBoolean(isRefreshHeader) && requestURL.toString().contains("/api/v1/auth/refresh"));
     }
 
-    public String generateRefreshToken(Map<String, Object> claims, String subject) {
-
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiresIn))
-                .signWith(SIGNATURE_ALGORITHM, secretKey).compact();
-    }
 }
