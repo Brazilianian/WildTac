@@ -40,9 +40,18 @@ public class JwtRefreshTokenHelper {
 
         // TODO: 21.12.2022 set expiration date 1 month
         cookie.setMaxAge(30_000);
-//        cookie.setSecure(true);
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
+
         return cookie;
+
+//        return ResponseCookie.from(COOKIE_REFRESH_TOKEN_NAME, generateRefreshToken(claims))
+//                .httpOnly(true)
+//                .maxAge(Duration.ofHours(1))
+//                .sameSite("Lax")
+//                .secure(false)
+//                .path("/")
+//                .build();
     }
 
     public String getTokenFromCookie(HttpServletRequest request) {

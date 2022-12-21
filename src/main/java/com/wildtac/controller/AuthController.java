@@ -15,7 +15,6 @@ import com.wildtac.mapper.user.UserRegstrationMapper;
 import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +27,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -95,7 +93,7 @@ public class AuthController {
         return userResponseDto;
     }
 
-    @PostMapping("/refresh")
+    @GetMapping("/refresh")
     @ResponseBody
     public UserAuthenticationResponseDto refreshToken(HttpServletRequest request) {
         String token = jwtRefreshTokenHelper.getTokenFromCookie(request);

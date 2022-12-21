@@ -60,7 +60,7 @@ public class WebSecurityConfiguration {
                 registry
                         .addMapping("/**")
                         .allowCredentials(true)
-                        .allowedOrigins("http://172.20.10.7:3000", "http://localhost:3000")
+                        .allowedOrigins("http://192.168.43.173:3000", "http://localhost:3000")
                         .allowedMethods("*")
                         .allowedHeaders("Authorization", "Cache-Control", "Content-Type");
             }
