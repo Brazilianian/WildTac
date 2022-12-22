@@ -16,6 +16,7 @@ import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -103,6 +104,7 @@ public class AuthController {
 
         String claims = jwtTokenHelper.getUsernameFromToken(token);
         User user = userService.getUserByEmailOrPhoneNumber(claims);
+
         if (!user.getRefreshToken().equals(token)) {
             throw new InvalidJwtTokenException("Invalid refresh token");
         }
@@ -113,5 +115,21 @@ public class AuthController {
                 .accessToken(accessToken)
                 .user(userMapper.fromObjectToDto(user))
                 .build();
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(HttpServletRequest request) {
+        String token = jwtRefreshTokenHelper.getTokenFromCookie(request);
+        if (token == null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            throw new ExpiredJwtException(null, null, "There is no refresh token");
+        }
+
+        String claims = jwtTokenHelper.getUsernameFromToken(token);
+        User user = userService.getUserByEmailOrPhoneNumber(claims);
+        user.setRefreshToken(null);
+        userService.save(user);
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }
