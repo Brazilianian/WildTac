@@ -62,8 +62,7 @@ public class WebSecurityConfiguration {
                         .allowCredentials(true)
                         .allowedOrigins("http://192.168.43.173:3000", "http://localhost:3000")
                         .allowedMethods("*")
-                        // TODO: 21.12.2022 try to add set-cookie 
-                        .allowedHeaders("Authorization", "Cache-Control", "Content-Type");
+                        .allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Set-Cookie");
             }
         };
     }

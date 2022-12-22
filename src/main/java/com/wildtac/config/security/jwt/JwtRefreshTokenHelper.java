@@ -3,10 +3,12 @@ package com.wildtac.config.security.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -35,23 +37,14 @@ public class JwtRefreshTokenHelper {
                 .compact();
     }
 
-    public Cookie getCookieWithToken(String claims) {
-        Cookie cookie = new Cookie(COOKIE_REFRESH_TOKEN_NAME, generateRefreshToken(claims));
+    public ResponseCookie getCookieWithToken(String claims) {
 
-        // TODO: 21.12.2022 set expiration date 1 month
-        cookie.setMaxAge(30_000);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-
-//        return ResponseCookie.from(COOKIE_REFRESH_TOKEN_NAME, generateRefreshToken(claims))
-//                .httpOnly(true)
-//                .maxAge(Duration.ofHours(1))
-//                .sameSite("Lax")
-//                .secure(false)
-//                .path("/")
-//                .build();
+        return ResponseCookie.from(COOKIE_REFRESH_TOKEN_NAME, generateRefreshToken(claims))
+                .httpOnly(true)
+                .maxAge(Duration.ofDays(30))
+                .sameSite("None")
+                .path("/")
+                .build();
     }
 
     public String getTokenFromCookie(HttpServletRequest request) {
