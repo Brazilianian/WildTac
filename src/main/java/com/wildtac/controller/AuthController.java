@@ -101,10 +101,19 @@ public class AuthController {
         if (token == null) {
             throw new ExpiredJwtException(null, null, "There is no refresh token");
         }
-
-        String claims = jwtTokenHelper.getUsernameFromToken(token);
+        String claims;
+        try {
+            claims = jwtTokenHelper.getUsernameFromToken(token);
+        } catch (ExpiredJwtException e) {
+            User user = userService.getUserByEmailOrPhoneNumber(e.getClaims().getSubject());
+            user.setRefreshToken(null);
+            userService.save(user);
+            throw e;
+        }
         User user = userService.getUserByEmailOrPhoneNumber(claims);
-
+        if (user.getRefreshToken() == null) {
+            throw new InvalidJwtTokenException("You need to login");
+        }
         if (!user.getRefreshToken().equals(token)) {
             throw new InvalidJwtTokenException("Invalid refresh token");
         }

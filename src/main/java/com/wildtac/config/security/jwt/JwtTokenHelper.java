@@ -19,16 +19,10 @@ public class JwtTokenHelper {
     private String secretKey;
 
     private Claims getAllClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            throw e;
-        }
-        return claims;
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String getUsernameFromToken(String token) {
