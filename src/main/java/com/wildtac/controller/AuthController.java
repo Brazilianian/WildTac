@@ -17,6 +17,7 @@ import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -75,7 +75,7 @@ public class AuthController {
 
         User user = userService.getUserByEmailOrPhoneNumber(claims);
 
-        Cookie jwtRefreshCookie = jwtRefreshTokenHelper.getCookieWithToken(claims);
+        ResponseCookie jwtRefreshCookie = jwtRefreshTokenHelper.getCookieWithToken(claims);
 
         user.setRefreshToken(jwtRefreshCookie.getValue());
         user = userService.save(user);
@@ -89,7 +89,7 @@ public class AuthController {
                 .build();
 
 
-        response.addCookie(jwtRefreshCookie);
+        response.addHeader("Set-Cookie", jwtRefreshCookie.toString());
 
         return userResponseDto;
     }
