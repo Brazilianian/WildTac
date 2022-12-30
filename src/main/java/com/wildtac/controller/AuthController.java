@@ -16,7 +16,7 @@ import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseCookie;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -74,7 +75,7 @@ public class AuthController {
 
         User user = userService.getUserByEmailOrPhoneNumber(claims);
 
-        ResponseCookie jwtRefreshCookie = jwtRefreshTokenHelper.getCookieWithToken(claims);
+        Cookie jwtRefreshCookie = jwtRefreshTokenHelper.getCookieWithToken(claims);
 
         user.setRefreshToken(jwtRefreshCookie.getValue());
         user = userService.save(user);
@@ -88,7 +89,7 @@ public class AuthController {
                 .build();
 
 
-        response.addHeader("Set-Cookie", jwtRefreshCookie.toString());
+        response.addCookie(jwtRefreshCookie);
 
         return userResponseDto;
     }
@@ -100,9 +101,19 @@ public class AuthController {
         if (token == null) {
             throw new ExpiredJwtException(null, null, "There is no refresh token");
         }
-
-        String claims = jwtTokenHelper.getUsernameFromToken(token);
+        String claims;
+        try {
+            claims = jwtTokenHelper.getUsernameFromToken(token);
+        } catch (ExpiredJwtException e) {
+            User user = userService.getUserByEmailOrPhoneNumber(e.getClaims().getSubject());
+            user.setRefreshToken(null);
+            userService.save(user);
+            throw e;
+        }
         User user = userService.getUserByEmailOrPhoneNumber(claims);
+        if (user.getRefreshToken() == null) {
+            throw new InvalidJwtTokenException("You need to login");
+        }
         if (!user.getRefreshToken().equals(token)) {
             throw new InvalidJwtTokenException("Invalid refresh token");
         }
@@ -113,5 +124,21 @@ public class AuthController {
                 .accessToken(accessToken)
                 .user(userMapper.fromObjectToDto(user))
                 .build();
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(HttpServletRequest request) {
+        String token = jwtRefreshTokenHelper.getTokenFromCookie(request);
+        if (token == null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            throw new ExpiredJwtException(null, null, "There is no refresh token");
+        }
+
+        String claims = jwtTokenHelper.getUsernameFromToken(token);
+        User user = userService.getUserByEmailOrPhoneNumber(claims);
+        user.setRefreshToken(null);
+        userService.save(user);
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }

@@ -3,11 +3,13 @@ package com.wildtac.service;
 import com.wildtac.domain.user.User;
 import com.wildtac.exception.alreadyexists.UserAlreadyExistsException;
 import com.wildtac.repository.UserRepo;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
 
 import static com.wildtac.domain.user.security.UserRole.USER;
@@ -75,4 +77,6 @@ public class UserService {
     public User save(User user) {
         return userRepo.save(user);
     }
+
+
 }

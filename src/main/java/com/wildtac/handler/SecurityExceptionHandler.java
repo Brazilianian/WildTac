@@ -20,13 +20,11 @@ public class SecurityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<String> catchInvalidJwtTokenException(InvalidJwtTokenException e) {
-        log.warn(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> catchUsernameNotFoundException(UsernameNotFoundException e) {
-        log.warn(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

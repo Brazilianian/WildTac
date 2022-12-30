@@ -3,12 +3,14 @@ package com.wildtac.config.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtTokenHelper {
@@ -17,12 +19,10 @@ public class JwtTokenHelper {
     private String secretKey;
 
     private Claims getAllClaimsFromToken(String token) {
-        Claims claims;
-        claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims;
     }
 
     public String getUsernameFromToken(String token) {
@@ -87,8 +87,9 @@ public class JwtTokenHelper {
     }
 
     public boolean isRefresh(HttpServletRequest request) {
+        String isRefreshHeader = request.getHeader("IsRefresh");
         StringBuffer requestURL = request.getRequestURL();
-        return (requestURL.toString().contains("/api/v1/auth/refresh"));
+        return (Boolean.parseBoolean(isRefreshHeader) && requestURL.toString().contains("/api/v1/auth/refresh"));
     }
 
 }
