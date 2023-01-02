@@ -53,8 +53,9 @@ public class ProductService {
 
         for (Image image : product.getImages()) {
             image.setParentId(createdProduct.getId());
-            imageService.saveImage(image);
         }
+
+        createdProduct = save(product);
 
         log.info(String.format("Product '%s' was saved", createdProduct));
         return createdProduct;

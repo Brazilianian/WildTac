@@ -34,6 +34,7 @@ public class Product extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Transient
     private List<Image> images = new ArrayList<>();
 
     @ToString.Exclude

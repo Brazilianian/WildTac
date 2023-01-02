@@ -44,6 +44,8 @@ public class WebSecurityConfiguration {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(userSecurityService, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class);
 
+        http.cors();
+
         return http.build();
     }
 
@@ -60,9 +62,9 @@ public class WebSecurityConfiguration {
                 registry
                         .addMapping("/**")
                         .allowCredentials(true)
-                        .allowedOrigins("http://192.168.43.173:3000", "http://localhost:3000")
-                        .allowedMethods("*")
-                        .allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Set-Cookie");
+                        .allowedOrigins("http://10.5.113.113:3000", "http://localhost:3000")
+                        .allowedMethods("DELETE", "POST", "GET", "OPTIONS, PATCH, HEAD, TRACE")
+                        .allowedHeaders("*");
             }
         };
     }

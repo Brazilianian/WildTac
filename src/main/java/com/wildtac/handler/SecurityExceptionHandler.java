@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class SecurityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> catchExpiredJwtException(ExpiredJwtException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ExpiredJwtException> catchExpiredJwtException(ExpiredJwtException e) {
+        return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> catchInvalidJwtTokenException(InvalidJwtTokenException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<InvalidJwtTokenException> catchInvalidJwtTokenException(InvalidJwtTokenException e) {
+        return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> catchUsernameNotFoundException(UsernameNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<UsernameNotFoundException> catchUsernameNotFoundException(UsernameNotFoundException e) {
+        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
     }
 }

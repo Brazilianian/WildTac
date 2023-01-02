@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class EntityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> catchEntityAlreadyExistsException(EntityAlreadyExistsException e) {
+    public ResponseEntity<EntityAlreadyExistsException> catchEntityAlreadyExistsException(EntityAlreadyExistsException e) {
         log.warn(e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> catchEntityWasNotFoundException(EntityWasNotFoundException e) {
+    public ResponseEntity<EntityWasNotFoundException> catchEntityWasNotFoundException(EntityWasNotFoundException e) {
         log.warn(e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
     }
 }

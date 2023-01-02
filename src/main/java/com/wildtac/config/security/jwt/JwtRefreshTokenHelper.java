@@ -43,6 +43,7 @@ public class JwtRefreshTokenHelper {
                 .httpOnly(true)
                 .maxAge(Duration.ofDays(30))
                 .sameSite("None")
+                .secure(true)
                 .path("/")
                 .build();
     }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -25,7 +26,8 @@ public class ProductDto extends BaseDto {
 
     private List<CharacteristicDto> characteristics;
 
-    @Min(value = 1, message = "The discount of product can`t be less or equals zero")
+    @Min(value = 0, message = "The discount of product can`t be less than zero")
+    @Max(value = 100, message = "The discount can`t be bigger than 100")
     private double discount;
 
     private List<FeedbackDto> feedbacks;
