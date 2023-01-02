@@ -12,4 +12,4 @@ Current app can show you basic principles of using:
 
 # Purpose
 My main aim not only create the site but try to create the Java application on Spring Framework with much as possible clean code, 
-using design patterns and basic rules and princiles of developing Web Applications. 
+using design patterns and basic rules and principles of developing Web Applications. 
