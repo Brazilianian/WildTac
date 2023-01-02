@@ -48,7 +48,6 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
-    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductDto> getProducts(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Product> products = productService.getAllProducts(pageable);
@@ -58,7 +57,6 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public ProductDto getProduct(@PathVariable(name = "id") Long id) {
         Product product = productService.getProductById(id);
@@ -69,7 +67,6 @@ public class ProductController {
 
     @GetMapping("/subcategory/{subcategoryId}")
     @ResponseBody
-    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductDto> getProductsByCategory(@PathVariable(name = "subcategoryId") Long subcategory,
                                                   Pageable pageable) {
@@ -80,7 +77,6 @@ public class ProductController {
 
     @GetMapping("/{id}/images")
     @ResponseBody
-    @PreAuthorize("hasAuthority('product:read')")
     @ResponseStatus(HttpStatus.OK)
     public List<ImageDto> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
         List<Image> productImages = imageService.getImagesByParentId(productId);
@@ -105,6 +101,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('product:delete')")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteProduct(@PathVariable(name = "id") Long id) {
         productService.deleteProduct(id);
     }

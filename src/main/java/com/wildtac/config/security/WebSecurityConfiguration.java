@@ -7,6 +7,7 @@ import com.wildtac.service.security.UserSecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -39,7 +40,7 @@ public class WebSecurityConfiguration {
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .antMatcher("/api/v1/**").authorizeRequests()
-                .antMatchers("/api/v1/auth/*").permitAll()
+                .antMatchers("/api/v1/auth/*", "/api/v1/product/*", "/api/v1/category/*", "/api/v1/image/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(userSecurityService, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class);
@@ -58,7 +59,8 @@ public class WebSecurityConfiguration {
     public WebMvcConfigurer getCorsConfiguration() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@Nullable CorsRegistry registry) {
+                assert registry != null;
                 registry
                         .addMapping("/**")
                         .allowCredentials(true)

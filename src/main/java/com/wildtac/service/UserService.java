@@ -1,15 +1,16 @@
 package com.wildtac.service;
 
 import com.wildtac.domain.user.User;
+import com.wildtac.dto.user.UserDto;
 import com.wildtac.exception.alreadyexists.UserAlreadyExistsException;
 import com.wildtac.repository.UserRepo;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.wildtac.domain.user.security.UserRole.USER;
@@ -79,4 +80,33 @@ public class UserService {
     }
 
 
+    public List<User> getPageOfUsers(Pageable pageable) {
+        return userRepo.findAll(pageable).getContent();
+    }
+
+    public User redactUserInfo(User user, UserDto userDto) {
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
+        }
+
+        if (userDto.getSurname() != null) {
+            user.setSurname(userDto.getSurname());
+        }
+
+        if (userDto.getAddress() != null) {
+            user.setAddress(userDto.getAddress());
+        }
+
+        // TODO: 02.01.2023 Refactor this part of code
+
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        if (userDto.getPhoneNumber() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+
+        return save(user);
+    }
 }

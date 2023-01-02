@@ -29,7 +29,6 @@ public class ImageController {
 
     @GetMapping("/image/{id}")
     @ResponseBody
-    @PreAuthorize("hasAuthority('image:read')")
     @ResponseStatus(HttpStatus.OK)
     public ImageDto getImageById(@PathVariable Long id) {
         Image image = imageService.getImageById(id);
@@ -39,7 +38,6 @@ public class ImageController {
 
     @GetMapping("/image-parent/{parentId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('image:read')")
     @ResponseBody
     public List<ImageDto> getImagesByParentId(@PathVariable(name = "parentId") Long parentId) {
         List<Image> images = imageService.getImagesByParentId(parentId);
@@ -48,7 +46,6 @@ public class ImageController {
 
     @GetMapping("/image-parent/{parentId}/index/{index}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('image:read')")
     @ResponseBody
     public ImageDto getImageByParentIdAndIndex(@PathVariable(name = "index") Long index,
                                             @PathVariable(name = "parentId") Long parentId) {

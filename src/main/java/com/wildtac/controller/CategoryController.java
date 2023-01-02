@@ -30,7 +30,7 @@ public class CategoryController {
 
     @GetMapping
     @ResponseBody
-    @PreAuthorize("hasAuthority('category:read')")
+    @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
 
@@ -39,7 +39,6 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     @ResponseBody
-    @PreAuthorize("hasAuthority('category:read')")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategoryByName(@PathVariable(name = "categoryId") Long categoryId) {
         Category category = categoryService.getCategoryById(categoryId);
