@@ -12,18 +12,18 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <starter-web.version>2.7.2</starter-web.version>
-        <starter-data-jpa.version>2.7.2</starter-data-jpa.version>
-        <postgresql.version>42.4.0</postgresql.version>
+        <starter-web.version>3.0.1</starter-web.version>
+        <starter-data-jpa.version>3.0.1</starter-data-jpa.version>
+        <postgresql.version>42.5.1</postgresql.version>
         <lombok.version>1.18.24</lombok.version>
-        <modelmapper.version>3.1.0</modelmapper.version>
-        <spring-boot-starter-security.version>2.7.5</spring-boot-starter-security.version>
-        <jaxb-api.version>2.3.1</jaxb-api.version>
-        <jaxb-runtime.version>2.3.1</jaxb-runtime.version>
+        <modelmapper.version>3.1.1</modelmapper.version>
+        <spring-boot-starter-security.version>3.0.1</spring-boot-starter-security.version>
+        <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
+        <jaxb-runtime.version>4.0.0</jaxb-runtime.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jackson-databind.version>2.14.1</jackson-databind.version>
         <guava.version>31.1-jre</guava.version>
-        <spring-boot-strarter-validation.version>2.6.8</spring-boot-strarter-validation.version>
+        <spring-boot-strarter-validation.version>3.0.1</spring-boot-strarter-validation.version>
 
     </properties>
 

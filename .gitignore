@@ -1,4 +1,5 @@
 # Project exclude paths
 /target/
+/.idea/
 application.properties
 local-ssl.p12
