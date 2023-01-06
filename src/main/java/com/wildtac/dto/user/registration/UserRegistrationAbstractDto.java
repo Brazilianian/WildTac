@@ -4,7 +4,7 @@ import com.wildtac.dto.BaseDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
 
 @Getter
 @Setter

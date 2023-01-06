@@ -15,6 +15,9 @@ import com.wildtac.mapper.user.UserRegstrationMapper;
 import com.wildtac.service.UserService;
 import com.wildtac.utils.ValidationUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -25,9 +28,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -62,6 +62,8 @@ public class AuthController {
                                                HttpServletResponse response) {
 
         String claims;
+
+
         if (userDto.getEmail() != null) {
             claims = userDto.getEmail();
         } else {

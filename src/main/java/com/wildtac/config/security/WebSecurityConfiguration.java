@@ -1,6 +1,5 @@
 package com.wildtac.config.security;
 
-import com.wildtac.config.security.jwt.JwtAuthenticationFilter;
 import com.wildtac.config.security.jwt.JwtTokenHelper;
 import com.wildtac.config.security.jwt.RestAuthenticationEntryPoint;
 import com.wildtac.service.security.UserSecurityService;
@@ -13,11 +12,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @Configuration
 @EnableWebSecurity
@@ -25,25 +23,30 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration {
 
-    private final UserSecurityService userSecurityService;
-    private final RestAuthenticationEntryPoint authenticationEntryPoint;
-    private final JwtTokenHelper jwtTokenHelper;
+//    private final UserSecurityService userSecurityService;
+//    private final RestAuthenticationEntryPoint authenticationEntryPoint;
+//    private final JwtTokenHelper jwtTokenHelper;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable();
 
-        http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .antMatcher("/api/v1/**").authorizeRequests()
-                .antMatchers("/api/v1/auth/*", "/api/v1/product/*", "/api/v1/category/*", "/api/v1/image/*").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(userSecurityService, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class);
+//        http
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+//                .and()
+//                .antMatchers("/api/v1/**")
+//                .antMatchers("/api/v1/auth/*", "/api/v1/product/*", "/api/v1/category/*", "/api/v1/image/*").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .addFilterBefore(new JwtAuthenticationFilter(userSecurityService, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class);
+
+        http.authorizeHttpRequests(authConfig -> {
+           authConfig.requestMatchers("/api/v1/auth/*", "/api/v1/product/*", "/api/v1/category/*", "/api/v1/image/*").permitAll();
+           authConfig.anyRequest().authenticated();
+        });
 
         http.cors();
 

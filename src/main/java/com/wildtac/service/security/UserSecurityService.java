@@ -1,19 +1,12 @@
 package com.wildtac.service.security;
 
-import com.wildtac.config.security.jwt.JwtRefreshTokenHelper;
-import com.wildtac.config.security.jwt.JwtTokenHelper;
 import com.wildtac.domain.user.User;
-import com.wildtac.repository.UserRepo;
 import com.wildtac.service.UserService;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor

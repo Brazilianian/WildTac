@@ -1,10 +1,8 @@
 package com.wildtac.dto.product.category;
 
 import com.wildtac.dto.BaseDto;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 
 @NoArgsConstructor

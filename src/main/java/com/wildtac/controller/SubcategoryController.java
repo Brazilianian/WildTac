@@ -9,13 +9,13 @@ import com.wildtac.mapper.product.category.SubcategoryMapper;
 import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.product.category.SubcategoryService;
 import com.wildtac.utils.ValidationUtils;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController

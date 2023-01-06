@@ -12,12 +12,12 @@ import com.wildtac.mapper.product.ProductMapper;
 import com.wildtac.service.product.FeedbackService;
 import com.wildtac.service.product.ProductService;
 import com.wildtac.utils.ValidationUtils;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController

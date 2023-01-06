@@ -3,7 +3,7 @@ package com.wildtac.dto.product.category;
 import com.wildtac.dto.image.ImageDto;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor

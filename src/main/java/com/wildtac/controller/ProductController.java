@@ -14,6 +14,7 @@ import com.wildtac.service.product.ProductService;
 import com.wildtac.service.product.category.CategoryService;
 import com.wildtac.service.product.category.SubcategoryService;
 import com.wildtac.utils.ValidationUtils;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,7 +27,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 

@@ -2,12 +2,12 @@ package com.wildtac.domain.product.feedback.like;
 
 import com.wildtac.domain.BaseEntity;
 import com.wildtac.domain.user.User;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 
 @Getter
 @Setter
